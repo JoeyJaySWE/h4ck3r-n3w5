@@ -12,15 +12,21 @@ $metaCardAlt = "";
 
 // ----------------------------------------------------------------
 
-require __DIR__."/views/header.php";
+require "views/header.php";
 
-// ----------------- [ Comment Box ] ------------------ 
 
-    //Type your code section here...
+
+
+// ----------------- [ comment:box ] ------------------ 
+
+//Type your code section here...
 
 // ----------------------------------------------------------------
 
-// ----------------- [ META DATA ] ------------------
+
+
+
+// ----------------- [ META DATA:PHP ] ------------------
 
 $meta_title = "";
 $meta_desc = "";
@@ -29,3 +35,38 @@ $meta_card = "";
 $meta_card_alt = "";
 
 // ----------------------------------------------------------------
+
+
+
+
+
+?>
+
+
+
+<!-- <meta property="og:site_name" content="">
+<meta property="og:title" content="" />
+<meta property="og:description" content="" />
+<meta property="og:image" content="" />
+<meta name="twitter:image" content="" />
+<meta name="twitter:card" content="" />
+<meta name="twitter:image:alt" content="">
+<meta propety="og:url" content="" />
+
+
+
+
+<meta property="og:site_name" content="">
+<meta property="og:title" content="<?= $metaTitle; ?>" />
+<meta property="og:description" content="<?= $metaDesc; ?>" />
+<meta property="og:image" content="<?= $metaImg; ?>" />
+<meta name="twitter:image" content="<?= $metaImg; ?>" />
+<meta name="twitter:card" content="<?= $metaCard; ?>" />
+<meta name="twitter:image:alt" content="<?= $metImgAlt; ?>">
+<meta propety="og:url" content="" /> -->
+
+<?php
+
+require "views/footer.php";
+
+?>

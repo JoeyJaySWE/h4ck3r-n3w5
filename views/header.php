@@ -1,3 +1,8 @@
+<?php
+
+require "restricted.php";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
