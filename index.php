@@ -2,68 +2,24 @@
 
 // ------------------- [ HEADER DATA ] -----------------------------
 
-$title = "";
-$metaTitle = "";
-$metaDesc = "";
-$metaImg = "";
-$metaCard = "";
-$metaCardAlt = "";
+$title = "H4ck3r N3w5";
+$metaTitle = "H4ck3r N3w5";
+$metaDesc = "Hacker News a site where you can share your latest links for usueful tools or stuff.";
+$metaImg = "./assets/img/favicon.png";
+$metaCard = "summary";
+$metaCardAlt = "A news paper made of code";
 
 
 // ----------------------------------------------------------------
 
 require "views/header.php";
-
-
-
-
-// ----------------- [ comment:box ] ------------------ 
-
-//Type your code section here...
-
-// ----------------------------------------------------------------
-
-
-
-
-// ----------------- [ META DATA:PHP ] ------------------
-
-$meta_title = "";
-$meta_desc = "";
-$meta_img = "";
-$meta_card = "";
-$meta_card_alt = "";
-
-// ----------------------------------------------------------------
-
-
-
-
-
 ?>
 
 
+<main>
+    <h1>H4ck3r N3w5</h1>
+</main>
 
-<!-- <meta property="og:site_name" content="">
-<meta property="og:title" content="" />
-<meta property="og:description" content="" />
-<meta property="og:image" content="" />
-<meta name="twitter:image" content="" />
-<meta name="twitter:card" content="" />
-<meta name="twitter:image:alt" content="">
-<meta propety="og:url" content="" />
-
-
-
-
-<meta property="og:site_name" content="">
-<meta property="og:title" content="<?= $metaTitle; ?>" />
-<meta property="og:description" content="<?= $metaDesc; ?>" />
-<meta property="og:image" content="<?= $metaImg; ?>" />
-<meta name="twitter:image" content="<?= $metaImg; ?>" />
-<meta name="twitter:card" content="<?= $metaCard; ?>" />
-<meta name="twitter:image:alt" content="<?= $metImgAlt; ?>">
-<meta propety="og:url" content="" /> -->
 
 <?php
 

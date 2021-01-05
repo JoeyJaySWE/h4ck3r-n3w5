@@ -1,6 +1,6 @@
 <?php
-
-require "restricted.php";
+require "functions.php";
+// require "restricted.php";
 
 ?>
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ require "restricted.php";
     <meta name="twitter:image" content="<?= $metaImg; ?>" />
     <meta name="twitter:card" content="<?= $metaCard; ?>" />
     <meta name="twitter:image:alt" content="<?= $metImgAlt; ?>">
-    <meta propety="og:url" content="http://vengefulscars.joeyjaydigital.com/img/" />
+    <meta propety="og:url" content="https://projects.joeyjaydigital.com/h4ck3r-n3w5/" />
     <title><?= $title; ?></title>
 </head>
 
