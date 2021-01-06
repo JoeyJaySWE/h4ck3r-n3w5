@@ -13,6 +13,8 @@ $title = "Sign up";
 
 require  "../../views/header.php";
 
+session_start();
+
 ?>
 
 <main>
@@ -25,16 +27,20 @@ require  "../../views/header.php";
     <form action="../databases/db.php" method="post">
         <input type="text" name="full_name" placeholder="Steven Stevenssen" required />
         <input type="email" name="email" placeholder="mail@mail.com" required />
-        <input type="text" name="username" placeholder="username" required />
         <input type="password" name="password" placeholder="password" required>
         <input type="hidden" name="task" value="add user" />
         <input type="password" name="re_password" placeholder="repeat password" required>
         <input type="checkbox" name="terms" required> I hearby agree to the <a href="terms-and-conditions.php" target="_blank">Term and Conditions</a>.
         <button type="submit" name="submit">Register!</button>
     </form>
-    <p class="error">
+    <p class="error" style="color:red;font-weight:bold;">
         <?php if (isset($_SESSION['error_msg'])) {
             echo $_SESSION['error_msg'];
+        } ?>
+    </p>
+    <p class="success" style="color:greenyellow">
+        <?php if (isset($_SESSION['success_msg'])) {
+            echo $_SESSION['success_msg'];
         } ?>
     </p>
 </main>

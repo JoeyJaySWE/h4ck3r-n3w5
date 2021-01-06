@@ -5,10 +5,10 @@
 
 // ----------------- [ DB connection ] ------------------ 
 
-function db(): PDO
+function db()
 {
 
-    $dir = "sqlite:../app/databases/h4ck3r.sqlite";
+    $dir = "sqlite:h4ck3r.sqlite";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -21,6 +21,7 @@ function db(): PDO
         throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
     }
 
+
     return $db;
 }
 
@@ -31,33 +32,123 @@ function db(): PDO
 
 
 
+
+
 // ----------------- [ Sanitize form inputs ] ------------------ 
 
 function form_sanitizer(array $post_data)
 {
-    // die(var_dump($post_data));
-    echo "Inside function: <br/>";
     $filtered_data = [];
     foreach ($post_data as $key => $value) {
         if ($key === "submit") {
             continue;
         }
-        echo $key . ": " . $post_data[$key] . "</br>";
 
         $trimmed = filter_var(trim($post_data[$key]), FILTER_SANITIZE_EMAIL);
 
         if (filter_var($trimmed, FILTER_VALIDATE_EMAIL)) {
-            echo "<br>This is valid email</br>";
             $filtered_data[$key] = $trimmed;
         } else {
-            echo "Normal string sanitizer <br/>";
             $filtered_data[$key] = filter_var(trim($post_data[$key]), FILTER_SANITIZE_STRING);
         }
-        echo "Updated value of " . $key . ": " . $filtered_data[$key] . "<br>";
     }
-    $filtered_data['test'] = "Right array";
-    print_r($filtered_data);
     return $filtered_data;
 }
+
+// ----------------------------------------------------------------
+
+
+
+
+
+
+
+
+// ----------------- [ Add New User ] ------------------------------ 
+
+function add_new_user($db, array $user_data)
+{
+    session_start();
+
+    // check if user already exxsists
+    $get_users = $db->prepare("SELECT Emails FROM users WHERE Emails = :email");
+    $data = ["email" => $user_data['email']];
+    $get_users->execute($data);
+    $row = $get_users->fetchAll(PDO::FETCH_ASSOC);
+    if ($row) {
+        $_SESSION['error_msg'] = "Email adress already in usedddd!";
+        $_SESSION['success_msg'] = "";
+        header("Location: http://localhost:8000/app/users/reg.php");
+        die("error");
+    } else {
+
+
+
+
+
+        $fname = $_POST['full_name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $re_password = $_POST['re_password'];
+
+
+        // password match check
+        if ($password !== $re_password) {
+
+            $_SESSION['error_msg'] = "Passwords missmatch!";
+            $_SESSION['success_msg'] = "";
+            header("Location: http://localhost:8000/app/users/reg.php");
+            die("password error");
+        }
+
+
+
+
+
+
+
+        // adds user
+        else {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            $add_user = $db->prepare("INSERT INTO users
+                                    (Emails, Passwords, Avatars, Bios, Joined, Full_names)
+                                    VALUES
+                                    (:email, :password, :avatar, :bio, :joined, :fname)");
+
+
+            $data = [
+                "email" => $email,
+                "password" => $password,
+                "avatar" => "",
+                "bio" => "",
+                "joined" => date('Ymd'),
+                "fname" => $fname
+            ];
+            try {
+                $add_user->execute($data);
+                $_SESSION['error_msg'] = "";
+                $_SESSION['success_msg'] = "Successfully created user!";
+                header("Location: http://localhost:8000/app/users/reg.php");
+                die("Success!");
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+        }
+    }
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+// ----------------- [ Log In Function ] ------------------ 
+
+    // add Code here.....
 
 // ----------------------------------------------------------------
