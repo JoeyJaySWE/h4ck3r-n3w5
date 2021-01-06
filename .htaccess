@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^projects.joeyjaydigital.com/$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www.projects.joeyjaydigital.com/$
+RewriteCond %{REQUEST_URI} !public_html/
+RewriteRule (.*) /public_html/$1 [L]
