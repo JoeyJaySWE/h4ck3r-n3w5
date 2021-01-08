@@ -2,17 +2,30 @@
 
 require "../../views/functions.php";
 
-if ($_POST['terms'] !== "on" xor !isset($_POST['submit'])) {
-    echo "Nice try, go back and fill in proper data :P";
-    header("refresh:5; url=https://projects.joeyjaydigital.com/h4ck3r-n3w5/app/users/reg.php");
+if (!isset($_POST['submit'])) {
+    abort_conection();
     die();
 }
 
 
 $_POST = form_sanitizer($_POST);
 
-if ($_POST['task'] === "add user") {
-    add_new_user(db(), $_POST);
+switch ($_POST['task']) {
 
-    // db();
+    case "add user":
+        if ($_POST['terms'] !== "on") {
+            abort_conection();
+        }
+        add_new_user(db(), $_POST);
+        break;
+
+
+    case "sign in":
+        echo "Sign in procees!";
+        login(db(), $_POST);
+        break;
+
+    default:
+        echo "Unkown form";
+        break;
 }

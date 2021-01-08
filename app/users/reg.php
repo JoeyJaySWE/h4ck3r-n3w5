@@ -1,6 +1,6 @@
 <?php
 
-// ----------------- [ META DATA ] ------------------
+// ----------------- [ META DATA ] --------------------------------
 
 $meta_title = "H4ck3r Sign up!";
 $meta_desc = "Wanna join the comunity? Sign up today to be able to vote on links, leave comments, and upload your own.";
@@ -11,11 +11,28 @@ $title = "Sign up";
 
 // ----------------------------------------------------------------
 
+
+// ----------------- [ Style sheets ] ----------------------------- 
+
+$styles = [
+    '../../assets/css/reset.css',
+    '../../assets/css/defaults.css'
+];
+
+// ----------------------------------------------------------------
+
+
+
+$title = "Register new H4ck3r";
+
 require  "../../views/header.php";
 
-session_start();
 
+// -----------------------------------------------------------------
 ?>
+
+
+
 
 <main>
     <h1>H4ck3r Sign Up</h1>
@@ -25,20 +42,20 @@ session_start();
         and even comment on the links provided by other users.
     </p>
     <form action="../databases/db.php" method="post">
-        <input type="text" name="full_name" placeholder="Steven Stevenssen" required />
+        <input type="text" id="full_name" placeholder="Steven Stevenssen" required />
         <input type="email" name="email" placeholder="mail@mail.com" required />
         <input type="password" name="password" placeholder="password" required>
         <input type="hidden" name="task" value="add user" />
         <input type="password" name="re_password" placeholder="repeat password" required>
-        <input type="checkbox" name="terms" required> I hearby agree to the <a href="terms-and-conditions.php" target="_blank">Term and Conditions</a>.
+        <input type="checkbox" name="terms" required> I hearby agree to the <a href="terms.php" target="_blank">Term and Conditions</a>.
         <button type="submit" name="submit">Register!</button>
     </form>
-    <p class="error" style="color:red;font-weight:bold;">
+    <p class="error">
         <?php if (isset($_SESSION['error_msg'])) {
             echo $_SESSION['error_msg'];
         } ?>
     </p>
-    <p class="success" style="color:greenyellow">
+    <p class="success">
         <?php if (isset($_SESSION['success_msg'])) {
             echo $_SESSION['success_msg'];
         } ?>
@@ -46,5 +63,16 @@ session_start();
 </main>
 
 
+
+
+
 <?php
+// ----------------- [ Scripts ] ---------------------------------- 
+
+$scripts = [
+    '../../app/JS/navigator.js'
+];
+
+// ----------------------------------------------------------------
+
 require "../../views/footer.php";

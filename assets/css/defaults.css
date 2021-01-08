@@ -1,0 +1,182 @@
+* {
+  --green-text: rgb(30, 255, 0);
+  --green-glass: rgba(30, 255, 0, 0.2);
+  --black-glass: rgba(0, 0, 0, 0.8);
+  --lnk-color: rgb(0, 255, 136);
+  color: var(--green-text);
+  box-sizing: border-box;
+  font-family: "JetBrains Mono", "Courier New", serif;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  font-size: 16px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-image: radial-gradient(#1b1b1b, rgb(2 12 1));
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: flex;
+  width: 100%;
+}
+h1 {
+  font-size: 2.7rem;
+  font-weight: bold;
+}
+h2 {
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+h3 {
+  font-size: 2.1rem;
+  font-weight: 500;
+}
+h4 {
+  font-size: 1.8rem;
+}
+h5 {
+  font-size: 1.5rem;
+}
+h6 {
+  font-weight: bold;
+}
+p {
+  margin-top: 20px;
+  display: block;
+}
+strong {
+  font-weight: bold;
+}
+input {
+  border: 2px solid;
+  border-radius: 5px;
+  margin-bottom: 2px;
+  background-color: transparent;
+  padding: 5px;
+}
+
+input[type="text"]:focus,
+input[type="text"]:active,
+input[type="text"]:-webkit-autofill,
+input[type="password"]:focus,
+input[type="password"]:active,
+input[type="password"]:-webkit-autofill,
+input[type="email"]:focus,
+input[type="email"]:active,
+input[type="email"]:-webkit-autofill,
+input[type="number"]:focus,
+input[type="number"]:active,
+input[type="number"]:-webkit-autofill {
+  background-color: var(--green-glass);
+  border: 2px solid var(--green-text);
+  border-radius: 5px;
+  appearance: unset;
+}
+/* input:focus {
+  background-color: var(--green-glass);
+  border: 2px solid var(--green-text);
+  border-radius: 5px;
+} */
+ul,
+ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--green-text);
+}
+.navbar {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  border-top: 2px solid var(--green-glass);
+  border-bottom: 2px solid var(--green-glass);
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 7px 7px black;
+  position: fixed;
+  background-color: var(--black-glass);
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 80%;
+}
+li {
+  display: list-item;
+  width: 100%;
+  margin-left: 20%;
+}
+nav li {
+  display: flex;
+  height: 60%;
+  align-items: center;
+  margin-left: unset;
+  width: auto;
+}
+
+button {
+  border: 3px solid;
+  padding: 10px 10px;
+  border-radius: 10px;
+  background-color: transparent;
+  transition: background-color 500ms ease;
+}
+button:hover {
+  cursor: pointer;
+  background-color: var(--green-glass);
+}
+a {
+  color: var(--lnk-color);
+}
+
+::placeholder {
+  opacity: 0.5;
+}
+a:focus,
+a:active {
+  border: 1px dashed;
+}
+a:visited {
+  opacity: 0.2;
+  color: var(--lnk-color);
+}
+a:hover,
+a:hover:visited {
+  cursor: pointer;
+  border-bottom: 2px solid;
+  color: var(--green-text);
+}
+span.quote {
+  display: block;
+  margin-left: auto;
+  font-style: italic;
+  font-size: 1rem;
+}
+.success {
+  color: greenyellow;
+}
+.error,
+.error a,
+.error a:visited {
+  color: red;
+  font-weight: bold;
+}
+main {
+  margin-top: 50px;
+  padding: 30px;
+}
+figcaption {
+  text-align: center;
+}
+.subtitle {
+  margin-top: 15px;
+  font-size: 1.7rem;
+}

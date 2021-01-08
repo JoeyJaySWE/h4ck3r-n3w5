@@ -1,6 +1,19 @@
 <?php
 
-// declare(strict_type=1);
+declare(strict_types=1);
+
+// ----------------- [ Abbort Conenction ] ------------------ 
+
+function abort_conection()
+{
+    echo "Nice try, go back and fill in proper data :P";
+    header("refresh:5; url=https://projects.joeyjaydigital.com/h4ck3r-n3w5/app/users/reg.php");
+}
+
+// ----------------------------------------------------------------
+
+
+
 
 
 // ----------------- [ DB connection ] ------------------ 
@@ -149,6 +162,69 @@ function add_new_user($db, array $user_data)
 
 // ----------------- [ Log In Function ] ------------------ 
 
-    // add Code here.....
+function login($db, $credentials)
+{
+    echo "<p>Inside the function{<p>";
+
+    echo "<p>";
+    print_r($credentials);
+    echo "</p>";
+
+    $mail = $_POST['mail'];
+    $password = $_POST['password'];
+
+    $find_user = $db->prepare("SELECT * FROM users WHERE Emails = :email");
+    $data = [
+        "email" => $mail
+    ];
+    $find_user->execute($data);
+
+    $db_user = $find_user->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+
+    if (!$db_user) {
+        session_start();
+        $_SESSION['error_msg'] = "Password or Email missmatch, try again or <a href='reg.php'>Register for free!</a>";
+        $_SESSION['success_msg'] = "";
+        header("Location: ../users/login.php");
+    }
+
+
+    foreach ($db_user as $user) {
+        if (password_verify($password, $user['Passwords'])) {
+            echo "password match!";
+            session_start();
+            $_SESSION['error_msg'] = "";
+            $_SESSION['user'] = $user['Full_names'];
+            header("Location: ../users/user.php");
+            break;
+        } else {
+            session_start();
+            $_SESSION['error_msg'] = "Password or Email missmatch, try again or <a href='reg.php'>Register for free!</a>";
+            $_SESSION['success_msg'] = "";
+            die("Missmatch passwords");
+            header("Location: ../users/login.php");
+            break;
+        }
+    }
+
+    echo "</p>}</p>";
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+// ----------------- [ Sign out ] ------------------ 
+
+function log_out()
+{
+    session_start();
+    session_destroy();
+}
 
 // ----------------------------------------------------------------

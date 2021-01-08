@@ -1,0 +1,36 @@
+section.quick_menue {
+  display: flex;
+  height: 80%;
+  width: 100%;
+  max-width: 350px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+}
+a.quick_launch_card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  max-width: 128px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+a.quick_launch_card > figure > img {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--green-glass);
+  border-radius: 10px;
+  /* max-width: 128px;
+  max-height: 128px; */
+}
+a.quick_launch_card:hover {
+  border: none;
+}
+a:hover.quick_launch_card > figure > figcaption {
+  width: 100%;
+  text-decoration: underline;
+}
