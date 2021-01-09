@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 // ----------------- [ Abbort Conenction ] ------------------ 
 
-function abort_conection()
+function abort_conection(): void
 {
     echo "Nice try, go back and fill in proper data :P";
     header("refresh:5; url=https://projects.joeyjaydigital.com/h4ck3r-n3w5/app/users/reg.php");
@@ -49,7 +49,7 @@ function db()
 
 // ----------------- [ Sanitize form inputs ] ------------------ 
 
-function form_sanitizer(array $post_data)
+function form_sanitizer(array $post_data): array
 {
     $filtered_data = [];
     foreach ($post_data as $key => $value) {
@@ -79,7 +79,7 @@ function form_sanitizer(array $post_data)
 
 // ----------------- [ Add New User ] ------------------------------ 
 
-function add_new_user($db, array $user_data)
+function add_new_user($db, array $user_data): void
 {
     session_start();
 
@@ -162,7 +162,7 @@ function add_new_user($db, array $user_data)
 
 // ----------------- [ Log In Function ] ------------------ 
 
-function login($db, $credentials)
+function login($db, array $credentials): void
 {
     echo "<p>Inside the function{<p>";
 
@@ -195,10 +195,13 @@ function login($db, $credentials)
 
     foreach ($db_user as $user) {
         if (password_verify($password, $user['Passwords'])) {
-            echo "password match!";
             session_start();
             $_SESSION['error_msg'] = "";
             $_SESSION['user'] = $user['Full_names'];
+            $_SESSION['user_mail'] = $user['Emails'];
+            $_SESSION['user_avatar'] = $user['Avatars'];
+            $_SESSION['user_bio'] = $user['Bios'];
+
             header("Location: ../users/user.php");
             break;
         } else {
@@ -219,12 +222,152 @@ function login($db, $credentials)
 
 
 
+
+
+
+
+
 // ----------------- [ Sign out ] ------------------ 
 
-function log_out()
+function log_out(): void
 {
     session_start();
     session_destroy();
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+
+
+
+// ----------------- [ Update user  ] ------------------ 
+
+function update_user($db, array $user): void
+{
+    session_start();
+    echo "<p>";
+    print_r($user);
+    echo "</p>";
+    echo "<p>";
+    print_r($_SESSION);
+    echo "</p>";
+
+    $_SESSION['success_msgs'] = [];
+    $_SESSION['error_msgs'] = [];
+
+    $fname = $_POST['fname'];
+    $mail = $_POST['email'];
+    $old_pass = $_POST['old_password'];
+    $new_pass = $_POST['new_password'];
+    $avatar = $_POST['avatar'];
+    $bio = $_POST['bio'];
+
+
+
+    // Checks if we wanted to change the password
+    if ($old_pass !== "" && $new_pass !== "" && $new_pass !== $old_pass) {
+
+        $get_password = $db->prepare("SELECT Passwords FROM users WHERE Emails=:email");
+        $query_data = [
+            'email' => $_SESSION['user_mail']
+        ];
+        $get_password->execute($query_data);
+        $db_passowrd = $get_password->fetch(PDO::FETCH_ASSOC);
+
+
+
+
+        if (password_verify($old_pass, $db_passowrd['Passwords'])) {
+
+            $new_pass = password_hash($new_pass, PASSWORD_DEFAULT);
+            $update_password = $db->prepare("UPDATE users SET Passwords = :new_pass WHERE Emails = :emails");
+
+            $query_data = ['new_pass' => $new_pass, 'emails' => $_SESSION['user_mail']];
+
+            try {
+                $update_password->execute($query_data);
+
+                // if we successfully replaced the password,
+                // we want to sign out the user to make sure it knows the password.
+                header("Location: ../users/log-out.php?update=true");
+                die("Success x2!");
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+        } else {
+            $_SESSION['error_msgs'][] = "Found no match for listed Old Password.";
+            header("Location: ../users/user.php?action=settings");
+        }
+    } else if ($old_pass == !"" xor $new_pass !== "") {
+        $_SESSION['error_msgs'][] = "Please enter both the old password,
+                                    and the one you want to change to.";
+        header("Location: ../users/user.php?action=settings");
+    }
+
+
+
+
+    // Checks if we wanted to replace the Mail
+    if ($mail !== "" && $mail !== $_SESSION['user_mail']) {
+        $update_mail = $db->prepare("UPDATE users SET Emails = :new_email WHERE Emails = :old_email");
+        $query_vairables = ['new_email' => $mail, 'old_email' => $_SESSION['user_mail']];
+        try {
+
+            $update_mail->execute($query_vairables);
+            $_SESSION['success_msgs'][] = "New email Saved Successfully!";
+            $_SESSION['user_mail'] = $mail;
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+        }
+    }
+
+
+    // checks if we wanted to replace the / add an avatar
+    if ($avatar !== "" && $avatar !== $_SESSION['user_avatar']) {
+        $update_avatar = $db->prepare("UPDATE users SET Avatars = :new_avatar WHERE Emails = :email");
+        $query_vairables = ['new_avatar' => $avatar, 'email' => $_SESSION['user_mail']];
+        try {
+            $update_avatar->execute($query_vairables);
+            $_SESSION['success_msgs'][] = "Avatar Saved Successfully!";
+            $_SESSION['user_avatar'] = $avatar;
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+        }
+    }
+
+
+
+    // checks if we wanted to replace the / add a biography
+    if ($bio !== "" && $bio !== $_SESSION['user_bio']) {
+        $update_bio = $db->prepare("UPDATE users SET Bios = :new_bio WHERE Emails = :email");
+        $query_vairables = ['new_bio' => $bio, 'email' => $_SESSION['user_mail']];
+        try {
+            $update_bio->execute($query_vairables);
+            $_SESSION['success_msgs'][] = "Bio updated!";
+            $_SESSION['user_bio'] = $bio;
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+        }
+    }
+
+
+
+    // Checks if we wanted to replace the name we use in the posts.
+    if ($fname !== "" && $fname !== $_SESSION['user']) {
+        $update_bio = $db->prepare("UPDATE users SET Full_names = :new_fname WHERE Emails = :email");
+        $query_vairables = ['new_fname' => $fname, 'email' => $_SESSION['user_mail']];
+        try {
+            $update_bio->execute($query_vairables);
+            $_SESSION['success_msgs'][] = "Full name updated!";
+            $_SESSION['user'] = $fname;
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+        }
+    }
+    header("Location: ../users/user.php?action=settings");
 }
 
 // ----------------------------------------------------------------

@@ -7,6 +7,7 @@ section.quick_menue {
   flex-wrap: wrap;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 30px;
 }
 a.quick_launch_card {
   display: flex;
@@ -33,4 +34,23 @@ a.quick_launch_card:hover {
 a:hover.quick_launch_card > figure > figcaption {
   width: 100%;
   text-decoration: underline;
+}
+.settings_form {
+  margin-top: 30px;
+  display: flex;
+  height: 400px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+.settings_form > *::placeholder {
+  opacity: 1;
+}
+img.avatar,
+h1 {
+  margin: auto;
+  display: block;
+  text-align: center;
 }

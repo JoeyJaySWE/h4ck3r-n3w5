@@ -27,7 +27,9 @@ $title = "Login Page";
 
 require "../../views/header.php";
 
-
+if (isset($_SESSION['user'])) {
+    header("Location: user.php");
+}
 // -----------------------------------------------------------------
 ?>
 
@@ -39,6 +41,11 @@ require "../../views/header.php";
     <h1>Login to H4ck3r N3w5!</h1>
     <p>Please enter your login details into the form below or register for free!</p>
 
+    <p class="success">
+        <?php if (isset($_SESSION['success_msg'])) {
+            echo $_SESSION['success_msg'];
+        } ?>
+    </p>
     <form action="../databases/db.php" method="post">
         <input type="hidden" value="sign in" name="task">
         <input type="text" placeholder="Mail" name="mail" required>

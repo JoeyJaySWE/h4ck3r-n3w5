@@ -25,6 +25,11 @@ switch ($_POST['task']) {
         login(db(), $_POST);
         break;
 
+    case "update user":
+        echo "Update user!";
+        update_user(db(), $_POST);
+        break;
+
     default:
         echo "Unkown form";
         break;

@@ -1,6 +1,8 @@
 * {
   --green-text: rgb(30, 255, 0);
   --green-glass: rgba(30, 255, 0, 0.2);
+  --red-text: rgb(255, 30, 0);
+  --red-glass: rgba(255, 30, 0, 0.2);
   --black-glass: rgba(0, 0, 0, 0.8);
   --lnk-color: rgb(0, 255, 136);
   color: var(--green-text);
@@ -52,7 +54,12 @@ p {
 strong {
   font-weight: bold;
 }
-input {
+textarea {
+  min-width: 220px;
+  min-height: 120px;
+}
+input,
+textarea {
   border: 2px solid;
   border-radius: 5px;
   margin-bottom: 2px;
@@ -63,6 +70,9 @@ input {
 input[type="text"]:focus,
 input[type="text"]:active,
 input[type="text"]:-webkit-autofill,
+input[type="url"]:focus,
+input[type="url"]:active,
+input[type="url"]:-webkit-autofill,
 input[type="password"]:focus,
 input[type="password"]:active,
 input[type="password"]:-webkit-autofill,
@@ -71,11 +81,15 @@ input[type="email"]:active,
 input[type="email"]:-webkit-autofill,
 input[type="number"]:focus,
 input[type="number"]:active,
-input[type="number"]:-webkit-autofill {
+input[type="number"]:-webkit-autofill,
+textarea:focus,
+textarea:active,
+textarea:-webkit-autofill {
   background-color: var(--green-glass);
   border: 2px solid var(--green-text);
   border-radius: 5px;
   appearance: unset;
+  outline: none;
 }
 /* input:focus {
   background-color: var(--green-glass);
@@ -179,4 +193,22 @@ figcaption {
 .subtitle {
   margin-top: 15px;
   font-size: 1.7rem;
+}
+
+button.cansel {
+  color: var(--red-text);
+}
+button.cansel:hover {
+  background-color: var(--red-glass);
+}
+img.avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: scale-down;
+  border-radius: 50%;
+  border: 5px solid var(--green-glass);
+}
+img.avatar_small {
+  max-height: 32px;
+  border-radius: 50%;
 }

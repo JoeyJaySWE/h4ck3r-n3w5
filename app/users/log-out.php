@@ -3,7 +3,7 @@
 require "../../views/functions.php";
 
 
-log_out();
+
 ?>
 
 <head>
@@ -32,14 +32,22 @@ log_out();
         }
     </style>
     <main>
-        <p class="log_out">
-            Ta-ta...! Come visit again...!<br> ... OR I'LL PLUCK OUT YOUR EYES! <br>
-            <span class="quote">&dash; Sheagorath, Prince of Madness</span>
-        </p>
+        <?php if (!isset($_GET['update'])) :  ?>
+            <p class="log_out">
+                Ta-ta...! Come visit again...!<br> ... OR I'LL PLUCK OUT YOUR EYES! <br>
+                <span class="quote">&dash; Sheagorath, Prince of Madness</span>
+            </p>
+        <?php else : ?>
+
+            <p>
+                Passwrod has been changed successfully, signing out...
+            </p>
+
+        <?php endif; ?>
     </main>
 </body>
 <?php
-
+Log_out();
 header("refresh:5; url=login.php");
 
 ?>
