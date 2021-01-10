@@ -1,6 +1,10 @@
 <?php
-require "functions.php";
-// require "restricted.php";
+if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
+    require "functions.php";
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +49,7 @@ require "functions.php";
                 } else { ?>
             <a href="/app/users/user.php"><?= $_SESSION['user'] ?></a>
             </li>
-            <li><a href="Log-out.php">Log out</a></li>
+            <li><a href="/app/users/log-out.php">Log out</a></li>
         <?php
                 }
         ?>

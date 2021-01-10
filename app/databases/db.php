@@ -30,6 +30,22 @@ switch ($_POST['task']) {
         update_user(db(), $_POST);
         break;
 
+    case "Create Post":
+        echo "Create Post!";
+        if ($_POST['title'] === "" && !isset($_POST['description']) && $_POST['lnk'] !== "") {
+            echo "Check link";
+            check_link(db(), $_POST['lnk']);
+        } else if ($_POST['title'] !== "" && $_POST['description'] !== "" && $_POST['lnk'] !== "") {
+            echo "Add Post!";
+            add_post(db(), $_POST);
+        } else {
+            $_SESSION['error_msgs'] = "Please fill in all fields properly.";
+            header("Location: ../posts/new-post.php#post_form");
+            die();
+        }
+
+        break;
+
     default:
         echo "Unkown form";
         break;

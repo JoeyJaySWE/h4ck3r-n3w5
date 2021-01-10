@@ -21,7 +21,7 @@ function abort_conection(): void
 function db()
 {
 
-    $dir = "sqlite:h4ck3r.sqlite";
+    $dir = "sqlite:" . __DIR__ . "/../app/databases/h4ck3r.sqlite";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -201,6 +201,7 @@ function login($db, array $credentials): void
             $_SESSION['user_mail'] = $user['Emails'];
             $_SESSION['user_avatar'] = $user['Avatars'];
             $_SESSION['user_bio'] = $user['Bios'];
+            $_SESSION['user_id'] = $user['Ids'];
 
             header("Location: ../users/user.php");
             break;
@@ -368,6 +369,161 @@ function update_user($db, array $user): void
         }
     }
     header("Location: ../users/user.php?action=settings");
+}
+
+// ----------------------------------------------------------------
+
+
+
+// ----------------- [ Cehck link ] ------------------ 
+
+function check_link($db, string $lnk): void
+{
+    $get_lnk = $db->prepare("SELECT Links FROM posts WHERE Links = :lnk");
+    $link = ['lnk' => $lnk];
+    try {
+        $get_lnk->execute($link);
+        $db_link = $get_lnk->fetchAll(PDO::FETCH_ASSOC);
+        if (!$db_link) {
+            session_start();
+            $_SESSION['lnk_free'] = $lnk;
+            unset($_SESSION['lnk_taken']);
+            header("location: ../posts/new-post.php#post_form");
+            die();
+        } else {
+            session_start();
+            $_SESSION['lnk_taken'] = true;
+            header("location: ../posts/new-post.php#post_form");
+        }
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+
+// ----------------- [ Add new Post to DB ] ------------------ 
+
+function add_post($db, array $post_data): void
+{
+
+    session_start();
+    $post_title = $post_data['title'];
+    $user = $_SESSION['user_id'];
+    $descr = $post_data['description'];
+    $lnk = $post_data['lnk'];
+
+
+
+
+
+    $add_post = $db->prepare("INSERT INTO posts
+    (Titles, Authurs_id, Descriptions, Links, Links_visits, Published)
+    VALUES
+    (:title, :user, :descr, :lnk, :visit, :publish)");
+
+
+    $data = [
+        "title" => $post_title,
+        "user" => $user,
+        "descr" => $descr,
+        "lnk" => $lnk,
+        "visit" => 0,
+        "publish" => date('Y-m-d, H:i')
+    ];
+    try {
+        $add_post->execute($data);
+        $_SESSION['error_msg'] = "";
+        $_SESSION['success_msg'] = "";
+        $get_post_id = $db->query("SELECT Ids FROM posts WHERE Links =:lnk");
+        $data = ['lnk' => $lnk];
+        try {
+
+            $get_post_id->execute($data);
+            $post_id = $get_post_id->fetchAll(PDO::FETCH_ASSOC);
+
+            header("Location: ../posts/posts.php?post=" . $post_id[0]['Ids']);
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+        }
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+// ----------------- [ Get Post Data ] ------------------ 
+
+function get_post($db, int $post_id): array
+{
+
+    // $post_id .= filter_var()
+    $post_id = filter_var($post_id, FILTER_SANITIZE_NUMBER_INT);
+    $post_data = [];
+
+
+    $get_post = $db->prepare("SELECT * FROM posts WHERE Ids = :id");
+    $query_data = ['id' => $post_id];
+    $get_post->execute($query_data);
+    $posts = $get_post->fetchALL(PDO::FETCH_ASSOC);
+    if ($posts) {
+        foreach ($posts as $post) {
+            $post_data[] = $post;
+        }
+        // var_dump($post_data);
+    }
+
+    $get_name_img = $db->prepare("SELECT Full_names, Avatars FROM users WHERE Ids = :id");
+    $query_data = ['id' => $post_data[0]['Authurs_id']];
+    $get_name_img->execute($query_data);
+    $name_img = $get_name_img->fetchALL(PDO::FETCH_ASSOC);
+    if ($name_img) {
+        $post_data[0]['Full_name'] = $name_img[0]['Full_names'];
+        $post_data[0]['Avatar'] = $name_img[0]['Avatars'];
+        return $post_data[0];
+        die();
+    } else {
+        die("No name found: " . var_dump($name_img));
+    }
+
+    // return $post_data;
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+// ----------------- [ Add Visit ] ------------------ 
+
+function add_visit($db, int $post_id): void
+{
+    $post_id = filter_var($post_id, FILTER_SANITIZE_NUMBER_INT);
+    $visited_post = ['id' => $post_id];
+    $get_visits = $db->prepare("SELECT Links_visits FROM posts WHERE Ids = :id");
+    $get_visits->execute($visited_post);
+    $vists = $get_visits->fetchALL(PDO::FETCH_ASSOC);
+    if ($vists) {
+        $visited = $vists[0]['Links_visits'];
+    }
+
+    $add_visit = $db->prepare("UPDATE posts SET Links_visits = :visits WHERE Ids=:id");
+    $post = ['visits' => ++$visited, 'id' => $post_id];
+    try {
+        $add_visit->execute($post);
+        die();
+        header("Location: ../posts/posts.php?post=" . $post_id . "&visited=true");
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
 }
 
 // ----------------------------------------------------------------

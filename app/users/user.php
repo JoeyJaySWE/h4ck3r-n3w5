@@ -7,8 +7,8 @@ if (!isset($_SESSION['user'])) {
 
 // ----------------- [ META DATA ] ------------------
 
-$meta_title = "Login";
-$meta_desc = "Here you'll sign into as a H4ck3r N3w5 publisher. Share your links and comment away till your hearts content!";
+$meta_title = "User";
+$meta_desc = "Access your settings, upload a post, check your post for comments, and many more useful tools.";
 $meta_img = "../../assets/img/favicon.png";
 $meta_card = "summary";
 $meta_card_alt = "A newspaper made up of code";
@@ -99,7 +99,7 @@ require "../../views/header.php";
         </ul>
         </p>
 
-        <form action="../databases/db.php" method="post" class="settings_form">
+        <form action="../databases/db.php" method="post" class="users_form">
             <input type="hidden" name="task" value="update user">
             <label for="fname">Full name:</label><input type="text" id="fname" name="fname" placeholder="<?= $_SESSION['user']; ?>">
             <label for="email">Email adress:</label><input type="email" id="email" name="email" placeholder="<?= $_SESSION['user_mail']; ?>">
@@ -107,7 +107,7 @@ require "../../views/header.php";
             <label for="new_password">New Password:</label><input type="password" id="new_password" name="new_password">
             <label for="avatar"><a href="https://imgur.com/upload" target="_blank">URL for avatar:</a></label><input type="url" id="avatar" name="avatar" <?php if (isset($_SESSION['user_avatar'])) ?> placeholder="<?= $_SESSION['user_avatar']; ?>">
             <label for="bio">User Biography:</label><textarea id="bio" name="bio"><?php if (isset($_SESSION['user_bio'])) ?><?= $_SESSION['user_bio']; ?></textarea>
-            <button type="submit" name="submit">Update!</button> <button class="cansel" formaction="user.php">Cancel!</button>
+            <button type="submit" name="submit">Update!</button> <button class="cancel" formaction="user.php">Cancel!</button>
 
         </form>
 

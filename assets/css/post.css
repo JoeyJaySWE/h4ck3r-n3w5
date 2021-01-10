@@ -1,0 +1,39 @@
+.users_form {
+  max-width: 390px;
+}
+figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 150px;
+  max-height: 170px;
+}
+figure strong {
+  margin-top: 10px;
+  color: var(--green-glass);
+}
+section.post_head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+section.post_head h1 {
+  width: auto;
+}
+section.post_head + p {
+  margin-top: 30px;
+  border-bottom: 3px solid var(--green-glass);
+  padding-bottom: 20px;
+}
+time.published {
+  display: block;
+  margin-left: auto;
+  width: auto;
+  text-align: right;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--green-glass);
+}

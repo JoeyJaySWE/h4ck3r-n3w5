@@ -195,10 +195,10 @@ figcaption {
   font-size: 1.7rem;
 }
 
-button.cansel {
+button.cancel {
   color: var(--red-text);
 }
-button.cansel:hover {
+button.cancel:hover {
   background-color: var(--red-glass);
 }
 img.avatar {
@@ -211,4 +211,14 @@ img.avatar {
 img.avatar_small {
   max-height: 32px;
   border-radius: 50%;
+}
+.users_form {
+  margin-top: 30px;
+  display: flex;
+  height: 400px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
 }
