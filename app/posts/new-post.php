@@ -5,6 +5,13 @@ if (!isset($_SESSION['user'])) {
     header("location: login.php");
 }
 
+
+if (!isset($_SESSION['new-post'])) {
+    $_SESSION['new-post'] = [];
+}
+
+
+
 // ----------------- [ META DATA ] ------------------
 
 $meta_title = "Creat Post!";
@@ -46,11 +53,11 @@ require "../../views/header.php";
     </p>
 
     <p class="error">
-        <?php if (isset($_SESSION['lnk_taken'])) {
+        <?php if (isset($_SESSION['new-post']['lnk_taken'])) {
 
             echo "Link already uploaded, try something else.";
-        } else if (isset($_SESSION['error_msgs'])) {
-            foreach ($_SESSION['error_msgs'] as $error) {
+        } else if (isset($_SESSION['new-post']['error_msgs'])) {
+            foreach ($_SESSION['new-post']['error_msgs'] as $error) {
                 echo $error;
             }
         } ?>
@@ -59,11 +66,12 @@ require "../../views/header.php";
     <form action="/app/databases/db.php" method="post" class="users_form">
         <input type="hidden" name="task" value="Create Post">
         <label for="lnk">Link to share:</label>
-        <input type="url" id="lnk" name="lnk" value="<?php if (isset($_SESSION['lnk_free'])) echo $_SESSION['lnk_free']; ?>">
+        <input type="url" id="lnk" name="lnk" <?php if (isset($_SESSION['new-post']['lnk_free'])) echo "value='" . $_SESSION['new-post']['lnk_free'] . "' required"; ?>>
         <label for="title">Title:</label>
         <input type="text" id="title" name="title">
         <?php
-        if (!isset($_SESSION['lnk_free'])) : ?>
+
+        if (!isset($_SESSION['new-post']['lnk_free'], $_GET['new_lnk'])) : ?>
 
             <label for="description" disabled>Description:</label>
             <textarea id="lnk" name="lnk" disabled></textarea>

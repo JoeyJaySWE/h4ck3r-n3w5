@@ -10,18 +10,23 @@ figure {
   max-width: 150px;
   max-height: 170px;
 }
-figure strong {
+figure strong,
+figure > figcaption {
   margin-top: 10px;
-  color: var(--green-glass);
+  color: var(--green-dark);
 }
 section.post_head {
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
 }
 section.post_head h1 {
-  width: auto;
+  width: 100%;
+  max-width: 250px;
+  text-align: center;
+  justify-content: center;
 }
 section.post_head + p {
   margin-top: 30px;
@@ -35,5 +40,68 @@ time.published {
   text-align: right;
   margin-top: 10px;
   font-size: 0.8rem;
-  color: var(--green-glass);
+  color: var(--green-dark);
+}
+
+.post_filter {
+  list-style-type: none;
+  justify-content: space-between;
+  align-items: center;
+}
+.post_filter > li > button {
+  display: flex;
+  margin-left: 10px;
+  font-size: 0.8rem;
+}
+
+article.post_card {
+  margin-top: 60px;
+  border-top: 3px solid var(--green-glass);
+  border-bottom: 3px solid var(--green-glass);
+  padding: 30px;
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+article.post_card > h2 {
+  display: inline-block;
+  width: 100%;
+  max-width: 250px;
+  text-align: center;
+}
+article.post_card > ul,
+article.post_card > ul time {
+  margin-top: 30px;
+  list-style-type: none;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--green-dark);
+}
+article.post_card > ul > li {
+  display: inline;
+  font-size: 0.8rem;
+}
+form.vote_form {
+  margin-top: 30px;
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+select:focus,
+select:active,
+select:-webkit-autofill,
+option:focus,
+option:active,
+option:-webkit-autofill {
+  background-color: var(--green-glass);
+  border: 2px solid var(--green-text);
+  border-radius: 5px;
+  appearance: menulist;
+  outline: none;
+  min-width: 35px;
 }

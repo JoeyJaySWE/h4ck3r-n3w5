@@ -61,6 +61,11 @@ function form_sanitizer(array $post_data): array
 
         if (filter_var($trimmed, FILTER_VALIDATE_EMAIL)) {
             $filtered_data[$key] = $trimmed;
+        } else if (filter_var($trimmed, FILTER_VALIDATE_INT)) {
+
+            $filtered_data[$key] = filter_var(trim($post_data[$key]), FILTER_SANITIZE_NUMBER_INT);
+        } else if (filter_var($trimmed, FILTER_VALIDATE_URL)) {
+            $filtered_data[$key] = filter_var(trim($post_data[$key]), FILTER_SANITIZE_URL);
         } else {
             $filtered_data[$key] = filter_var(trim($post_data[$key]), FILTER_SANITIZE_STRING);
         }
@@ -132,7 +137,7 @@ function add_new_user($db, array $user_data): void
             $data = [
                 "email" => $email,
                 "password" => $password,
-                "avatar" => "",
+                "avatar" => "https://media.discordapp.net/attachments/488482156704825348/798263922091098202/favicon.png",
                 "bio" => "",
                 "joined" => date('Ymd'),
                 "fname" => $fname
@@ -202,6 +207,7 @@ function login($db, array $credentials): void
             $_SESSION['user_avatar'] = $user['Avatars'];
             $_SESSION['user_bio'] = $user['Bios'];
             $_SESSION['user_id'] = $user['Ids'];
+
 
             header("Location: ../users/user.php");
             break;
@@ -386,14 +392,15 @@ function check_link($db, string $lnk): void
         $db_link = $get_lnk->fetchAll(PDO::FETCH_ASSOC);
         if (!$db_link) {
             session_start();
-            $_SESSION['lnk_free'] = $lnk;
-            unset($_SESSION['lnk_taken']);
-            header("location: ../posts/new-post.php#post_form");
+            $_SESSION['new-post']['lnk_free'] = $lnk;
+            unset($_SESSION['new-post']['lnk_taken']);
+            header("location: ../posts/new-post.php?new_lnk=true");
             die();
         } else {
             session_start();
-            $_SESSION['lnk_taken'] = true;
-            header("location: ../posts/new-post.php#post_form");
+            $_SESSION['new-post']['lnk_taken'] = true;
+            header("location: ../posts/new-post.php?new_lnk=false");
+            die();
         }
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
@@ -417,6 +424,12 @@ function add_post($db, array $post_data): void
     $descr = $post_data['description'];
     $lnk = $post_data['lnk'];
 
+    // check if user included an end "/" if not, we add it for them.
+    $lnk_length = strlen($lnk);
+    if (!strpos($lnk, "/", --$lnk_length)) {
+        $lnk .= "/";
+    }
+
 
 
 
@@ -437,8 +450,7 @@ function add_post($db, array $post_data): void
     ];
     try {
         $add_post->execute($data);
-        $_SESSION['error_msg'] = "";
-        $_SESSION['success_msg'] = "";
+
         $get_post_id = $db->query("SELECT Ids FROM posts WHERE Links =:lnk");
         $data = ['lnk' => $lnk];
         try {
@@ -446,7 +458,22 @@ function add_post($db, array $post_data): void
             $get_post_id->execute($data);
             $post_id = $get_post_id->fetchAll(PDO::FETCH_ASSOC);
 
-            header("Location: ../posts/posts.php?post=" . $post_id[0]['Ids']);
+            $add_score = $db->prepare("INSERT INTO scores (Posts_id, Users_id, Scores) VALUES (:post, :authur, :score)");
+            $score_data = [
+                'post' => $post_id[0]['Ids'],
+                'authur' => $user,
+                'score' => 1
+            ];
+
+            try {
+
+                $add_score->execute($score_data);
+                $_SESSION['new-post']['error_msg'] = "";
+                $_SESSION['new-post']['success_msg'] = "";
+                header("Location: ../posts/posts.php?post=" . $post_id[0]['Ids']);
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
         }
@@ -462,15 +489,72 @@ function add_post($db, array $post_data): void
 
 // ----------------- [ Get Post Data ] ------------------ 
 
-function get_post($db, int $post_id): array
+function get_post($db, int $post_id, string $all = null, string $order = null, string $direction = null): array
 {
+    if ($all === "*") {
 
-    // $post_id .= filter_var()
+
+        if ($order !== NULL) {
+            switch ($order) {
+                case "Published":
+                    $sort = "ORDER BY posts." . $order;
+                    break;
+                case "Full_names":
+                    $sort = "ORDER BY users." . $order;
+                    break;
+                case "Scores":
+                    $sort = "ORDER BY " . $order;
+                    break;
+            }
+        } else {
+            $sort = null;
+        }
+        $get_posts = $db->query("SELECT 
+                                    posts.*,
+                                    users.Full_names,
+                                    users.Avatars,
+                                    AVG(scores.Scores) as Scores,
+                                    COUNT(scores.Scores) as Voters
+                                    FROM posts
+                                    INNER JOIN  users
+                                    ON posts.Authurs_id = users.Ids
+                                    INNER JOIN scores
+                                    ON posts.Ids = scores.Posts_id
+                                    GROUP BY scores.Posts_id
+                                    " . $sort . " " . $direction);
+        $get_posts->execute();
+        $posts = $get_posts->fetchAll(PDO::FETCH_ASSOC);
+        if ($posts) {
+
+
+            return $posts;
+        } else {
+            exit("No posts could be found.");
+        }
+    } else if ($all !== "*" && $all !== NULL) {
+        var_dump("not *");
+        if (isset($_SESSION['new-post'])) {
+            $_SESSION['new-post']['error_msgs'][] = "Forbidden argument send. Try again.";
+        } else if (isset($_SESSION['posts'])) {
+            var_dump("Posts session added");
+            exit("Forbidden argument send. Try again.");
+        }
+        die();
+    }
+
     $post_id = filter_var($post_id, FILTER_SANITIZE_NUMBER_INT);
     $post_data = [];
 
-
-    $get_post = $db->prepare("SELECT * FROM posts WHERE Ids = :id");
+    $get_post = $db->prepare("SELECT posts.*,
+    users.Full_names,
+    users.Avatars,
+    AVG(scores.Scores) as Scores,
+    COUNT(scores.Scores) as Voters
+    FROM posts
+    INNER JOIN  users
+    ON posts.Authurs_id = users.Ids
+    INNER JOIN scores
+    ON posts.Ids = scores.Posts_id WHERE posts.Ids = :id");
     $query_data = ['id' => $post_id];
     $get_post->execute($query_data);
     $posts = $get_post->fetchALL(PDO::FETCH_ASSOC);
@@ -479,22 +563,10 @@ function get_post($db, int $post_id): array
             $post_data[] = $post;
         }
         // var_dump($post_data);
-    }
-
-    $get_name_img = $db->prepare("SELECT Full_names, Avatars FROM users WHERE Ids = :id");
-    $query_data = ['id' => $post_data[0]['Authurs_id']];
-    $get_name_img->execute($query_data);
-    $name_img = $get_name_img->fetchALL(PDO::FETCH_ASSOC);
-    if ($name_img) {
-        $post_data[0]['Full_name'] = $name_img[0]['Full_names'];
-        $post_data[0]['Avatar'] = $name_img[0]['Avatars'];
         return $post_data[0];
-        die();
     } else {
-        die("No name found: " . var_dump($name_img));
+        exit("Couldn't find any matching posts");
     }
-
-    // return $post_data;
 }
 
 // ----------------------------------------------------------------
@@ -519,10 +591,55 @@ function add_visit($db, int $post_id): void
     $post = ['visits' => ++$visited, 'id' => $post_id];
     try {
         $add_visit->execute($post);
-        die();
         header("Location: ../posts/posts.php?post=" . $post_id . "&visited=true");
+        die();
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
+}
+
+// ----------------------------------------------------------------
+
+
+
+// ----------------- [ Voting ] ---------------------------------- 
+
+function vote($db, int $post_id, int $user, int $score, string $update)
+{
+    var_dump("Adding score!");
+
+    if ($update === "false") {
+        $add_score = $db->prepare("INSERT INTO scores (Posts_id, Users_id, Scores) VALUES (:post, :user, :score)");
+    } else {
+        $add_score = $db->prepare("UPDATE scores SET Scores = :score WHERE Posts_id = :post AND Users_id = :user");
+    }
+    $post_data = ['post' => $post_id, 'user' => $user, 'score' => $score];
+    try {
+        $add_score->execute($post_data);
+        header("Location: ../posts/posts.php?post=" . $post_id);
+        die();
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
+}
+
+// ----------------------------------------------------------------
+
+
+
+
+// ----------------- [ Check if voted ] ------------------ 
+
+function check_voted($db, int $post_id, string $user): bool
+{
+    $get_user_votes = $db->prepare("SELECT Scores FROM scores WHERE Posts_id = :post AND Users_id = :user");
+    $request_data = ['post' => $post_id, 'user' => $user];
+    $get_user_votes->execute($request_data);
+    $results = $get_user_votes->fetchAll(PDO::FETCH_ASSOC);
+    if ($results) {
+        return true;
+    } else {
+        return false;
     }
 }
 
