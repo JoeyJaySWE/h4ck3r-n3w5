@@ -7,6 +7,7 @@ cancel_btns.forEach((cancel_btn) => {
 });
 
 let url = window.location.href;
+
 // cause we triggered the event as we were about to leave the field, we need to send it back to resume it.
 function new_post_safty(url) {
   const title_field = document.querySelector("#title");
@@ -45,21 +46,9 @@ function post_filter(url, order, direction = "DESC") {
   }
 }
 
-if (document.querySelector("button.edit_btn")) {
-  const edit_btn = document.querySelector("button.edit_btn");
-  edit_btn.addEventListener("click", function () {
-    window.location.href = url + "&action=edit";
-  });
-
-  //I never add edit without Delete
-  const delete_btn = document.querySelector("button.delete");
-  delete_btn.addEventListener("click", function () {
-    const warned = window.confirm("Are you sure you want to delete this?");
-    if (warned === true) {
-      console.log("Delete");
-      window.location.replace(url + "&iBLyq7APeDV2=ht_4ev!7oEAhvq9U!c@UU9-u*m");
-    } else {
-      console.log("Keep");
-    }
-  });
+console.log(document.cookie);
+console.log(document.cookie.search("tom"));
+if (document.cookie.search("scroll") !== -1) {
+  window.scrollTo(0, localStorage.getItem("scroll"));
+  console.log("found scorll");
 }

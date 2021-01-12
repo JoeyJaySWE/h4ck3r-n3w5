@@ -75,9 +75,10 @@ time.published {
 .post_card > ul time {
   margin-top: 30px;
   list-style-type: none;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-between;
+  line-height: 1.4rem;
+  justify-content: space-around;
   align-items: center;
   color: var(--green-dark);
 }
@@ -118,4 +119,65 @@ button {
 .authur_tools {
   display: flex;
   justify-content: space-around;
+}
+.comments_section > details {
+  margin-bottom: 30px;
+}
+.comments_section > details > summary {
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  list-style-image: none;
+  color: var(--lnk-color);
+  text-decoration: underline;
+}
+.comments_section > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.comments_section > details > summary:hover {
+  cursor: pointer;
+  color: var(--green-dark);
+}
+
+.comment_form {
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  max-width: 350px;
+}
+.comment_stats {
+  border-top: 2px solid var(--green-glass);
+  padding-top: 20px;
+}
+.comment_avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: scale-down;
+  border-radius: 50%;
+  border: 3px solid var(--green-glass);
+  text-align: center;
+  vertical-align: middle;
+}
+.comment_tools {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+}
+.comment_tools > button {
+  font-size: 0.7rem;
+  border: 1px solid;
+}
+.comments_section > article.post_card {
+  padding: 30px 10px;
+  justify-content: space-between;
+}
+.comments_section > article.post_card > p {
+  width: 100%;
+  max-width: 230px;
 }

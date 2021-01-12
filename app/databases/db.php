@@ -73,7 +73,18 @@ switch ($_POST['task']) {
         }
         break;
 
+    case "add_comment":
+        echo "Add a comment!";
+        manage_comment(db(), $_POST, "Add");
+        break;
+
+    case "edit_comment":
+        echo "Edit comment!";
+        manage_comment(db(), $_POST, "Edit");
+        break;
+
     default:
-        echo "Unkown form";
+        echo "Unkown form <br>";
+        die(var_dump($_POST['task']));
         break;
 }

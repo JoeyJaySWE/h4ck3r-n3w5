@@ -36,6 +36,28 @@ if (!isset($_SESSION['posts'])) {
 unset($_SESSION['new-post']);
 
 require "../../views/functions.php";
+
+
+if (isset($_GET)) {
+    $_GET = form_sanitizer($_GET);
+}
+
+if (
+    isset($_GET['comment'], $_GET['commentor'], $_GET['action'])
+    && $_GET['commentor'] === $_SESSION['user_id']
+    && $_GET['comment'] === $_COOKIE['comment_id']
+) {
+    $comment_request = [];
+    if ($_GET['action'] === "delete_comment") {
+        $comment_request['comment_id'] = $_SESSION['user_id'];
+        $comment_request['post_id'] = $_COOKIE['comment_id'];
+        manage_comment(db(), $comment_request, "Delete");
+    } else if ($_GET['action'] === "edit_comment") {
+        $edit = true;
+    }
+}
+
+
 // checks if we are watching the flow or a specific post
 if (isset($_GET['post'])) {
 
@@ -78,7 +100,7 @@ require "../../views/header.php";
 
 
     if (isset($post_data)) :
-        if (!isset($_GET['action'])) : ?>
+        if (!isset($_GET['action']) || $_GET['action'] !== "edit_comment" || $_GET['action'] !== "delete_comment") : ?>
             <article class="post_card">
                 <section class="post_head">
 
@@ -130,7 +152,7 @@ require "../../views/header.php";
 
 
                     <form class="post_card" action="../databases/db.php" method="post">
-                        <input type="hidden" name="task" value="post_edit">
+                        <input type="hidden" name="task" value="Add comment">
                         <input type="hidden" name="post_id" value="<?= $post_data['Ids'] ?>">
                         <section class="post_head">
 
@@ -178,12 +200,75 @@ require "../../views/header.php";
 
 
 
+            // Comment section 
+            ?>
 
-        // -------------------------- [ Posts Feed ] ----------------------------
+
+            <section class="comments_section">
+                <details open>
+                    <summary>Leave a comment</summary>
+                    <form class="comment_form" action="../databases/db.php" method="post">
+                        <input type="hidden" name="task" value="add_comment">
+                        <input type="hidden" name="user" value="<?= $_SESSION['user_id']; ?>">
+                        <input type="hidden" name="post_id" value="<?= $post_data['Ids'] ?>">
+                        <textarea requireed maxlength="5000" name="comment_txt"></textarea>
+                        <button type="submit" name="submit">Comment!</button>
+                    </form>
+                </details>
+                <?php
+                $comment_request = [];
+                $comment_request['post_id'] = $post_data['Ids'];
+                $comments = manage_comment(db(), $comment_request, "View");
+
+                foreach ($comments as $comment) :
+
+                    if (isset($edit)) :
+                        if ($comment['Ids'] === $_COOKIE['comment_id']) : ?>
+                            <form action="../databases/db.php" method="post">
+                                <article class="post_card">
+                                    <input type="hidden" name="task" value="edit_comment">
+                                    <input type="hidden" name="post_id" value="<?= $post_data['Ids']; ?>">
+                                    <textarea required name="comment"><?= $comment['Messages']; ?></textarea>
+                                    <section class="comment_tools">
+                                        <button type="submit" name="submit" value="submit">Save!</button>
+                                        <button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids'] ?>">Cancel</button>
+                                        <button class="delete" formnovalidate>DELETE</button>
+                                    </section>
+                                </article>
+                            </form>
+
+                    <?php endif; //Comment ID
+                    endif; //edit
+                    ?>
+
+                    <article class="post_card">
+                        <figure>
+                            <img class="comment_avatar" src="<?= $comment['Avatars'] ?>" alt="<?= $comment['Full_names']; ?>">
+                            <figcaption><?= $comment['Full_names']; ?></figcaption>
+                        </figure>
+                        <p><?= $comment['Messages']; ?></p>
+                        <?php
+                        if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
+                            <section class="comment_tools">
+                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id']; ?>" class="edit_btn">Edit</button>
+                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id']; ?>" class="delete">DELETE</button>
+                            </section>
+                        <?php endif; ?>
+                        <ul class="comment_stats">
+                            <li><time>Published <?= $comment['Published']; ?></time></li>
+                        </ul>
+                    </article>
+
+                <?php endforeach; ?>
+            </section>
+
+
+        <?php
+    // -------------------------- [ Posts Feed ] ----------------------------
 
 
 
-        else : ?>
+    else : ?>
 
 
             <ul class="post_filter">
@@ -273,10 +358,22 @@ if (!isset($_GET['post'])) {
         '/app/JS/post_filters.js'
     ];
 } else {
-    $scripts = [
-        '/app/JS/navigator.js',
-        '/app/JS/functions.js'
-    ];
+    if (!isset($not_authur)) {
+        $scripts = [
+
+            '/app/JS/functions.js',
+            '/app/JS/edit_comment.js',
+            '/app/JS/edit_post.js',
+            '/app/JS/navigator.js',
+        ];
+    } else {
+
+        $scripts = [
+            '/app/JS/navigator.js',
+            '/app/JS/functions.js',
+            '/app/JS/edit_comment.js'
+        ];
+    }
 }
 
 // ----------------------------------------------------------------

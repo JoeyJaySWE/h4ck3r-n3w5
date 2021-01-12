@@ -74,6 +74,9 @@ input[type="url"]:-webkit-autofill,
 select:focus,
 select:active,
 select:-webkit-autofill,
+summary:focus,
+summary:active,
+summary:-webkit-autofill,
 option:focus,
 option:active,
 option:-webkit-autofill,
@@ -107,6 +110,12 @@ option:focus,
 option:active,
 option:-webkit-autofill {
   appearance: menulist;
+}
+
+summary:focus,
+summary:active {
+  background-color: transparent;
+  border: none;
 }
 textarea,
 textarea:focus {

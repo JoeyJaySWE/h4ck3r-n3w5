@@ -700,19 +700,126 @@ function check_voted($db, int $post_id, string $user): bool
 
 // ----------------- [ DELETE POST ] ------------------------------ 
 
-function delete_post($db, string $post_id)
+function delete_post($db, string $post_id, string $comments = null)
 {
     $delete_post = $db->prepare("DELETE FROM posts WHERE Ids = :post_id");
     $delete_settings = ['post_id' => $post_id];
     try {
         $delete_post->execute($delete_settings);
 
-        header("Location: ../posts/posts.php");
-        die("unkown error");
+        $delete_post_scores = $db->prepare("DELETE FROM scores WHERE Posts_id = :post_id");
+        try {
+            $delete_post_scores->execute($delete_settings);
+
+            try {
+                $delete_post_scores->execute($delete_settings);
+
+                $delete_post_comments = $db->prepare("DELETE FROM comments WHERE Posts_id = :post_id");
+
+                try {
+
+                    $delete_post_comments->execute($delete_settings);
+                    header("Location: ../posts/posts.php");
+                } catch (\PDOException $e) {
+                    throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+                }
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+        }
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
     }
 }
 
 
-// ----------------------------------------------------------------
+// --------------------------------------------------------------------
+
+
+
+// ----------------- [ Comment management] ---------------------------- 
+
+function manage_comment($db, array $comment_data, string $task)
+{
+    $post = $comment_data['post_id'];
+
+    switch ($task) {
+
+        case "Add":
+            var_dump("Adding!");
+            $user = $comment_data['user'];
+            $comment = $comment_data['comment_txt'];
+            $add_comment = $db->prepare("INSERT INTO comments (Posts_id, Users_id, Messages, Published) VALUES (:post_id, :user, :msg, :published)");
+            $comment_settings = ['post_id' => $post, 'user' => $user, 'msg' => $comment, 'published' => date('Y-m-d, H:i')];
+
+            try {
+                $add_comment->execute($comment_settings);
+
+                header("Location: ../posts/posts.php?post=" . $post);
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+
+
+
+            break;
+
+        case "Edit":
+            var_dump("Editing");
+            $comment_id = $comment_data['comment_id'];
+            $comment = $comment_data['comment'];
+            die(var_dump($comment_data));
+            $edit_comments = $db->prepare("UPDATE comments SET Messages = :msg WHERE Ids = :comment_id AND Posts_id = :post_id");
+
+            $comment_settings = ['msg' => $comment, 'comment_id' => $comment_id, 'post_id' => $post];
+
+            try {
+                $edit_comments->execute($comment_settings);
+                header("Location: ../posts/posts.php?post=" . $post . "&comment=" . $comment_id);
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+
+
+            break;
+
+        case "Delete":
+            var_dump("DELETING!");
+            die(var_dump($comment_data));
+            $comment_id = $comment_data['comment_id'];
+
+            $delete_comment = $db->prepare("DELETE FROM comments WHERE Ids = :comment AND Posts_id = :post");
+            $comment_settings = ['comment' => $comment_id, 'post' => $post];
+
+            try {
+
+                $delete_comment->execute($comment_settings);
+                header("Location: ../posts/posts.php?post=" . $post . "&comment=" . $comment_id);
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+            break;
+
+        case "View":
+
+            $get_comment = $db->prepare("SELECT comments.*, users.Full_names, users.Avatars FROM comments INNER JOIN users ON comments.Users_id = users.Ids WHERE Posts_id = :post_id ORDER BY Published DESC");
+
+            $comment_settings = ['post_id' => $post];
+
+            try {
+
+                $get_comment->execute($comment_settings);
+                $comments = $get_comment->fetchAll(PDO::FETCH_ASSOC);
+                return $comments;
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+            break;
+        default:
+            die("Unkown function");
+    }
+}
+
+// --------------------------------------------------------------------
