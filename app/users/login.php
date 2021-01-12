@@ -53,6 +53,7 @@ if (isset($_SESSION['user'])) {
         <button type="submit" name="submit">Login!</button>
     </form>
     <a href="reg.php">Register for free!</a>
+    <a href="https://1password.com/" target="_blank">Forgotten Password?</a>
     <p class="error">
         <?php if (isset($_SESSION['error_msg'])) {
             echo $_SESSION['error_msg'];

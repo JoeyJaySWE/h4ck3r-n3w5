@@ -59,6 +59,20 @@ switch ($_POST['task']) {
         }
         break;
 
+    case "post_edit":
+        echo "Edit post!";
+        if ($_POST['title'] !== "" && $_POST['description'] !== "") {
+            echo "Update Post!";
+            update_post(db(), $_POST);
+            die();
+        } else {
+            session_start();
+            $_SESSION['error_msgs'] = "Please fill in all fields properly.";
+            header("Location: ../posts/posts.php?post=" . $_POST['post_id'] . "&action=edit");
+            die();
+        }
+        break;
+
     default:
         echo "Unkown form";
         break;

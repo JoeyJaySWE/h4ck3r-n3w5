@@ -5,6 +5,8 @@ if (!isset($_SESSION['user'])) {
     header("location: login.php");
 }
 
+
+
 // ----------------- [ META DATA ] ------------------
 
 $meta_title = "Creat Post!";
@@ -67,139 +69,215 @@ require "../../views/header.php";
 ?>
 
 <main class="post">
-    <?php if (isset($post_data)) : ?>
-        <article class="post_card">
-            <section class="post_head">
-
-                <figure>
-                    <img class="avatar" src="<?= $post_data['Avatars']; ?>" alt="<?= $post_data['Full_names']; ?>">
-                    <figcaption><?= $post_data['Full_names']; ?></figcaption>
-                </figure>
-                <h1><?= $post_data['Titles']; ?></h1>
-            </section>
-            <p><?= $post_data['Descriptions']; ?> <br><a href="<?= $post_data['Links']; ?>"><?= $post_data['Links']; ?></a></p>
-            <ul class="post_stats">
-                <li><?= $post_data['Links_visits']; ?> views,</li>
-                <li>Score: <?php
-                            if ($post_data['Scores'] === "1") {
-                                echo "Unrated";
-                            } else echo $post_data['Scores'] ?>&nbsp;(<?= $post_data['Voters'] ?> votes),</li>
-                <li><time>Published <?= $post_data['Published']; ?></time></li>
-            </ul> <?php
-
-                    if (isset($not_authur)) :
-                        $voted = check_voted(db(), (int)$post_id, $_SESSION['user_id']); ?>
-                <form class="vote_form" action="../databases/db.php" method="post">
-                    <input type="hidden" name="task" value="vote">
-                    <input type="hidden" name="post_id" value="<?= $post_data['Ids']; ?>">
-                    <strong>Give your vote!</strong>
-                    <select name="score">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                    <?php if ($voted !== true) : ?>
-                        <input type="hidden" name="update" value="false">
-                        <button type="submit" name="submit">Vote!</button>
-                    <?php else : ?>
-                        <input type="hidden" name="update" value="true">
-                        <button type="submit" name="submit">Change Vote!</button>
-                    <?php
-                        endif; ?>
-                </form>
-            <?php endif;
+    <?php
 
 
-            ?>
-        </article>
 
-    <?php else : ?>
+    // ---------------- [ Specific Post ] -----------------------------
 
 
-        <ul class="post_filter">
-            <li><button class="date_btn">Sort By Date</button></li>
-            <li><button class="user_btn">Sort By User</button></li>
-            <li><button class="score_btn">Sort By Score</button></li>
-        </ul>
 
-
-        <?php
-        if (isset($_GET['order'])) {
-            switch ($_GET['order']) {
-                case "Published":
-                    $order = "Published";
-                    break;
-                case "Full_names":
-                    $order = "Full_names";
-                    break;
-                case "Score":
-                    $order = "Scores";
-                    break;
-                default:
-                    $order = null;
-            }
-
-            if (isset($_GET['direction'])) {
-
-                switch ($_GET['direction']) {
-                    case "DESC":
-                        $direction = "DESC";
-                        break;
-                    case "ASC":
-                        $direction = "ASC";
-                        break;
-                    default:
-                        $direction = "DESC";
-                }
-            } else {
-                $direction = "DESC";
-            }
-        } else {
-            $order = null;
-            $direction = null;
-        }
-        $posts = get_post(db(), 666, "*", $order, $direction);
-
-        foreach ($posts as $post) :
-            // echo "<p>";
-            // var_dump($post);
-            // echo "</p>";
-        ?>
-
+    if (isset($post_data)) :
+        if (!isset($_GET['action'])) : ?>
             <article class="post_card">
-                <figure>
-                    <img class="avatar" src="<?= $post['Avatars'] ?>" alt="<?= $post['Full_names']; ?>">
-                    <figcaption><?= $post['Full_names']; ?></figcaption>
-                </figure>
-                <h2><a href="posts.php?post=<?= $post['Ids'] ?>"><?= $post['Titles'] ?></a></h2>
+                <section class="post_head">
+
+                    <figure>
+                        <img class="avatar" src="<?= $post_data['Avatars']; ?>" alt="<?= $post_data['Full_names']; ?>">
+                        <figcaption><?= $post_data['Full_names']; ?></figcaption>
+                    </figure>
+                    <h1><?= $post_data['Titles']; ?></h1>
+                </section>
+                <p><?= $post_data['Descriptions']; ?> <br><a href="<?= $post_data['Links']; ?>"><?= $post_data['Links']; ?></a></p>
                 <ul class="post_stats">
-                    <li><?= $post['Links_visits']; ?> views,</li>
-                    <li>Score: <?php if ($post['Scores'] === "1") {
+                    <li><?= $post_data['Links_visits']; ?> views,</li>
+                    <li>Score: <?php
+                                if ($post_data['Scores'] === "1") {
                                     echo "Unrated";
-                                } else echo $post['Scores'] ?>,</li>
-                    <li><time>Published <?= $post['Published']; ?></time></li>
-                </ul>
+                                } else echo $post_data['Scores'] ?>&nbsp;(<?= $post_data['Voters'] ?> votes),</li>
+                    <li><time>Published <?= $post_data['Published']; ?></time></li>
+                </ul> <?php
+
+                        if (isset($not_authur)) :
+                            $voted = check_voted(db(), (int)$post_id, $_SESSION['user_id']); ?>
+                    <form class="vote_form" action="../databases/db.php" method="post">
+                        <input type="hidden" name="task" value="vote">
+                        <input type="hidden" name="post_id" value="<?= $post_data['Ids']; ?>">
+                        <strong>Give your vote!</strong>
+                        <select name="score">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <?php if ($voted !== true) : ?>
+                            <input type="hidden" name="update" value="false">
+                            <button type="submit" name="submit">Vote!</button>
+                        <?php else : ?>
+                            <input type="hidden" name="update" value="true">
+                            <button type="submit" name="submit">Change Vote!</button>
+                        <?php
+                            endif; //ends the "if vote !== true"
+                        ?>
+                    </form>
+
+                <?php endif; //ends the "if isset($not_authur)"
+
+                    else :
+                        if ($_SESSION['user'] === $post_data['Full_names'] && $_GET['action'] === "edit") :
+                ?>
+
+
+                    <form class="post_card" action="../databases/db.php" method="post">
+                        <input type="hidden" name="task" value="post_edit">
+                        <input type="hidden" name="post_id" value="<?= $post_data['Ids'] ?>">
+                        <section class="post_head">
+
+                            <figure>
+                                <img class="avatar" src="<?= $post_data['Avatars']; ?>" alt="<?= $post_data['Full_names']; ?>">
+                                <figcaption><?= $post_data['Full_names']; ?></figcaption>
+                            </figure>
+                            <input require type="text" name="title" value="<?= $post_data['Titles']; ?>" />
+                        </section>
+                        <textarea require name="description"><?= $post_data['Descriptions']; ?> </textarea>
+
+                        <button type="submit" name="submit">Update!</button><button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids']; ?>">Cancel</button>
+
+                        <p class="error">
+                            <?php if (isset($_SESSION['error_msgs'])) {
+                                echo $_SESSION['error_msgs'];
+                            } ?>
+                        </p>
+                        </from>
+
+                <?php endif; //ends the "if user is authur and action = edit"
+                    endif; //ends the "if !isset($_GET['action'])"
+                ?>
             </article>
 
+            <?php
+            if (!isset($not_authur) && !isset($_GET['action'])) :
 
-        <?php endforeach;
+                // check if delete is triggered
+                if (isset($_GET['iBLyq7APeDV2']) && $_GET['iBLyq7APeDV2'] === "ht_4ev!7oEAhvq9U!c@UU9-u*m") {
+                    delete_post(db(), $post_data['Ids']);
+                } ?>
 
-        ?>
-    <?php endif; ?>
+
+                <section class="authur_tools">
+
+                    <button class="edit_btn">Edit Post</button>
+                    <button class="delete">DELETE POST</button>
+
+                </section>
+
+            <?php
+            endif; // ends "if current authur"
+
+
+
+
+
+        // -------------------------- [ Posts Feed ] ----------------------------
+
+
+
+        else : ?>
+
+
+            <ul class="post_filter">
+                <li><button class="date_btn">Sort By Date</button></li>
+                <li><button class="user_btn">Sort By User</button></li>
+                <li><button class="score_btn">Sort By Score</button></li>
+            </ul>
+
+
+            <?php
+            if (isset($_GET['order'])) {
+                switch ($_GET['order']) {
+                    case "Published":
+                        $order = "Published";
+                        break;
+                    case "Full_names":
+                        $order = "Full_names";
+                        break;
+                    case "Score":
+                        $order = "Scores";
+                        break;
+                    default:
+                        $order = null;
+                }
+
+                if (isset($_GET['direction'])) {
+
+                    switch ($_GET['direction']) {
+                        case "DESC":
+                            $direction = "DESC";
+                            break;
+                        case "ASC":
+                            $direction = "ASC";
+                            break;
+                        default:
+                            $direction = "DESC";
+                    }
+                } else {
+                    $direction = "DESC";
+                }
+            } else {
+                $order = null;
+                $direction = null;
+            }
+            $posts = get_post(db(), 666, "*", $order, $direction);
+
+            foreach ($posts as $post) :
+                // echo "<p>";
+                // var_dump($post);
+                // echo "</p>";
+            ?>
+
+                <article class="post_card">
+                    <figure>
+                        <img class="avatar" src="<?= $post['Avatars'] ?>" alt="<?= $post['Full_names']; ?>">
+                        <figcaption><?= $post['Full_names']; ?></figcaption>
+                    </figure>
+                    <h2><a href="posts.php?post=<?= $post['Ids'] ?>"><?= $post['Titles'] ?></a></h2>
+                    <ul class="post_stats">
+                        <li><?= $post['Links_visits']; ?> views,</li>
+                        <li>Score: <?php if ($post['Scores'] === "1") {
+                                        echo "Unrated";
+                                    } else echo $post['Scores'] ?>,</li>
+                        <li><time>Published <?= $post['Published']; ?></time></li>
+                    </ul>
+                </article>
+
+
+            <?php endforeach;
+
+
+            // -------------------------------------------------------------------------
+            ?>
+        <?php endif; ?>
 </main>
 
 
 <?php
 
-// ----------------- [ Scripts ] ------------------ 
+// ----------------- [ Scripts ] ---------------------------------- 
 
-$scripts = [
-    '/app/JS/navigator.js',
-    '/app/JS/functions.js',
-    '/app/JS/post_filters.js'
-];
+if (!isset($_GET['post'])) {
+
+    $scripts = [
+        '/app/JS/navigator.js',
+        '/app/JS/functions.js',
+        '/app/JS/post_filters.js'
+    ];
+} else {
+    $scripts = [
+        '/app/JS/navigator.js',
+        '/app/JS/functions.js'
+    ];
+}
 
 // ----------------------------------------------------------------
 

@@ -55,10 +55,6 @@ p {
 strong {
   font-weight: bold;
 }
-textarea {
-  min-width: 220px;
-  min-height: 120px;
-}
 input,
 textarea,
 select {
@@ -103,6 +99,7 @@ textarea:-webkit-autofill {
   outline: none;
   min-width: 35px;
 }
+
 select:focus,
 select:active,
 select:-webkit-autofill,
@@ -110,6 +107,11 @@ option:focus,
 option:active,
 option:-webkit-autofill {
   appearance: menulist;
+}
+textarea,
+textarea:focus {
+  min-width: 220px;
+  min-height: 120px;
 }
 /* input:focus {
   background-color: var(--green-glass);
@@ -222,9 +224,15 @@ figcaption {
 button.cancel {
   color: var(--red-text);
 }
-button.cancel:hover {
+button.cancel:hover,
+button.delete:hover {
   background-color: var(--red-glass);
 }
+button.delete {
+  color: var(--red-text);
+  font-weight: bold;
+}
+
 img.avatar {
   width: 150px;
   height: 150px;

@@ -413,7 +413,7 @@ function check_link($db, string $lnk): void
 
 
 
-// ----------------- [ Add new Post to DB ] ------------------ 
+// ----------------- [ Add new / Update Post ] ------------------ 
 
 function add_post($db, array $post_data): void
 {
@@ -433,8 +433,7 @@ function add_post($db, array $post_data): void
 
 
 
-
-    $add_post = $db->prepare("INSERT INTO posts
+    $process_post = $db->prepare("INSERT INTO posts
     (Titles, Authurs_id, Descriptions, Links, Links_visits, Published)
     VALUES
     (:title, :user, :descr, :lnk, :visit, :publish)");
@@ -449,7 +448,7 @@ function add_post($db, array $post_data): void
         "publish" => date('Y-m-d, H:i')
     ];
     try {
-        $add_post->execute($data);
+        $process_post->execute($data);
 
         $get_post_id = $db->query("SELECT Ids FROM posts WHERE Links =:lnk");
         $data = ['lnk' => $lnk];
@@ -483,6 +482,54 @@ function add_post($db, array $post_data): void
 }
 
 // ----------------------------------------------------------------
+
+
+
+
+
+
+
+
+// ----------------- [ Update Post ] ------------------------------
+
+
+
+function update_post($db, array $post_data): void
+{
+
+    $post_title = $post_data['title'];
+    $descr = $post_data['description'];
+    $post_id = $post_data['post_id'];
+
+    print_r($post_data);
+    var_dump($post_title);
+    var_dump($descr);
+    var_dump($post_id);
+    $update_post = $db->prepare("UPDATE posts 
+                                SET Titles = :post_title,
+                                Descriptions = :descr
+                                WHERE Ids = :Ids");
+    $query_data = ['post_title' => $post_title, 'descr' => $descr, 'Ids' => $post_id];
+
+    try {
+        $update_post->execute($query_data);
+
+        header("Location: ../posts/posts.php?post=" . $post_id);
+        die();
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
+}
+
+
+
+
+// ----------------------------------------------------------------
+
+
+
+
+
 
 
 
@@ -574,6 +621,9 @@ function get_post($db, int $post_id, string $all = null, string $order = null, s
 
 
 
+
+
+
 // ----------------- [ Add Visit ] ------------------ 
 
 function add_visit($db, int $post_id): void
@@ -642,5 +692,27 @@ function check_voted($db, int $post_id, string $user): bool
         return false;
     }
 }
+
+// ----------------------------------------------------------------
+
+
+
+
+// ----------------- [ DELETE POST ] ------------------------------ 
+
+function delete_post($db, string $post_id)
+{
+    $delete_post = $db->prepare("DELETE FROM posts WHERE Ids = :post_id");
+    $delete_settings = ['post_id' => $post_id];
+    try {
+        $delete_post->execute($delete_settings);
+
+        header("Location: ../posts/posts.php");
+        die("unkown error");
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+    }
+}
+
 
 // ----------------------------------------------------------------

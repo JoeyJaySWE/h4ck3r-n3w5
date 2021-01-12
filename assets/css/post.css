@@ -54,7 +54,7 @@ time.published {
   font-size: 0.8rem;
 }
 
-article.post_card {
+.post_card {
   margin-top: 60px;
   border-top: 3px solid var(--green-glass);
   border-bottom: 3px solid var(--green-glass);
@@ -65,14 +65,14 @@ article.post_card {
   justify-content: space-around;
   flex-wrap: wrap;
 }
-article.post_card > h2 {
+.post_card > h2 {
   display: inline-block;
   width: 100%;
   max-width: 250px;
   text-align: center;
 }
-article.post_card > ul,
-article.post_card > ul time {
+.post_card > ul,
+.post_card > ul time {
   margin-top: 30px;
   list-style-type: none;
   flex-direction: row;
@@ -81,9 +81,16 @@ article.post_card > ul time {
   align-items: center;
   color: var(--green-dark);
 }
-article.post_card > ul > li {
+.post_card > ul > li {
   display: inline;
   font-size: 0.8rem;
+}
+.post_card textarea {
+  width: 100%;
+  margin-top: 30px;
+}
+.post_card input[type="url"] {
+  margin-top: 10px;
 }
 form.vote_form {
   margin-top: 30px;
@@ -104,4 +111,11 @@ option:-webkit-autofill {
   appearance: menulist;
   outline: none;
   min-width: 35px;
+}
+button {
+  margin-top: 20px;
+}
+.authur_tools {
+  display: flex;
+  justify-content: space-around;
 }
