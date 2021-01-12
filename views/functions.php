@@ -770,14 +770,13 @@ function manage_comment($db, array $comment_data, string $task)
             var_dump("Editing");
             $comment_id = $comment_data['comment_id'];
             $comment = $comment_data['comment'];
-            die(var_dump($comment_data));
             $edit_comments = $db->prepare("UPDATE comments SET Messages = :msg WHERE Ids = :comment_id AND Posts_id = :post_id");
 
             $comment_settings = ['msg' => $comment, 'comment_id' => $comment_id, 'post_id' => $post];
 
             try {
                 $edit_comments->execute($comment_settings);
-                header("Location: ../posts/posts.php?post=" . $post . "&comment=" . $comment_id);
+                header("Location: ../posts/posts.php?post=" . $post);
             } catch (\PDOException $e) {
                 throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
             }

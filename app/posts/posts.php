@@ -228,6 +228,7 @@ require "../../views/header.php";
                                 <article class="post_card">
                                     <input type="hidden" name="task" value="edit_comment">
                                     <input type="hidden" name="post_id" value="<?= $post_data['Ids']; ?>">
+                                    <input type="hidden" name="comment_id" value="<?= $comment['Ids'] ?>">
                                     <textarea required name="comment"><?= $comment['Messages']; ?></textarea>
                                     <section class="comment_tools">
                                         <button type="submit" name="submit" value="submit">Save!</button>
@@ -238,6 +239,7 @@ require "../../views/header.php";
                             </form>
 
                     <?php endif; //Comment ID
+                        continue;
                     endif; //edit
                     ?>
 
