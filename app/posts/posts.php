@@ -44,13 +44,13 @@ if (isset($_GET)) {
 
 if (
     isset($_GET['comment'], $_GET['commentor'], $_GET['action'])
-    && $_GET['commentor'] === $_SESSION['user_id']
+    && $_GET['post'] === $_COOKIE['post_id']
     && $_GET['comment'] === $_COOKIE['comment_id']
 ) {
     $comment_request = [];
     if ($_GET['action'] === "delete_comment") {
-        $comment_request['comment_id'] = $_SESSION['user_id'];
-        $comment_request['post_id'] = $_COOKIE['comment_id'];
+        $comment_request['comment_id'] = $_COOKIE['comment_id'];
+        $comment_request['post_id'] = $_COOKIE['post_id'];
         manage_comment(db(), $comment_request, "Delete");
     } else if ($_GET['action'] === "edit_comment") {
         $edit = true;
@@ -252,8 +252,8 @@ require "../../views/header.php";
                         <?php
                         if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
                             <section class="comment_tools">
-                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id']; ?>" class="edit_btn">Edit</button>
-                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id']; ?>" class="delete">DELETE</button>
+                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="edit_btn">Edit</button>
+                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="delete">DELETE</button>
                             </section>
                         <?php endif; ?>
                         <ul class="comment_stats">

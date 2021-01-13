@@ -786,16 +786,14 @@ function manage_comment($db, array $comment_data, string $task)
 
         case "Delete":
             var_dump("DELETING!");
-            die(var_dump($comment_data));
             $comment_id = $comment_data['comment_id'];
 
             $delete_comment = $db->prepare("DELETE FROM comments WHERE Ids = :comment AND Posts_id = :post");
             $comment_settings = ['comment' => $comment_id, 'post' => $post];
 
             try {
-
                 $delete_comment->execute($comment_settings);
-                header("Location: ../posts/posts.php?post=" . $post . "&comment=" . $comment_id);
+                header("Location: ../posts/posts.php?post=" . $post);
             } catch (\PDOException $e) {
                 throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
             }
