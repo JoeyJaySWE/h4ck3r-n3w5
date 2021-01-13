@@ -103,5 +103,4 @@ $scripts = [
 
 
 require "../../views/footer.php";
-
 ?>
