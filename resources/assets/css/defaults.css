@@ -365,3 +365,16 @@ img.avatar_small {
   text-align: center;
   margin-left: 20px;
 }
+@media screen and (min-width: 700px) {
+  main {
+    max-width: 700px;
+    margin: auto;
+    margin-top: 90px;
+  }
+  .navbar {
+    /*max-width: 700px;*/
+  }
+  .menu_burger {
+    margin-left: 380px;
+  }
+}
