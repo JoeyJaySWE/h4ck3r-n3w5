@@ -74,7 +74,7 @@ require "../../views/header.php";
             </a>
             <a class="quick_launch_card" href="../users/user.php?action=settings">
                 <figure>
-                    <img src="https://via.placeholder.com/128?text=Edit+User+Settings" alt="Edit User Settings">
+                    <img src="../../assets/img/user_settings.png" alt="Edit User Settings">
                     <figcaption>Edit User Settings</figcaption>
                 </figure>
             </a>
