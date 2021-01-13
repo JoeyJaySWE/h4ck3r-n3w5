@@ -63,7 +63,7 @@ if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
 
         </nav>
     </section>
-    <nav class="burger_menu">
+    <nav class="burger_menu show">
         <li>
             <a href="/index.php">Home</a>
         </li>
@@ -72,7 +72,7 @@ if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
             if (!isset($_SESSION['user'])) : ?>
                 <a href="/app/users/login.php">Login</a>
         </li>
-        <li><a href="/app/user/terms.php">Terms & Conditions</a></li>
+        <li><a href="/app/users/terms.php">Terms & Conditions</a></li>
         <li><a href="/app/users/reg.php">Register</a></li>
         </li>
     <?php

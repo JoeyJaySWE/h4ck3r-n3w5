@@ -70,6 +70,7 @@ require  "../../views/header.php";
 // ----------------- [ Scripts ] ---------------------------------- 
 
 $scripts = [
+    '../../app/JS/functions.js',
     '../../app/JS/navigator.js'
 ];
 

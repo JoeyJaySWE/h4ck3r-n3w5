@@ -208,7 +208,7 @@ nav.burger_menu {
   border-bottom: 5px solid var(--green-glass);
   position: fixed;
   font-size: 2rem;
-  /* z-index: 3; */
+  z-index: 3;
 }
 nav.burger_menu li {
   height: auto;
