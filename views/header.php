@@ -32,7 +32,14 @@ if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
 
 <body>
     <section class="navbar">
-        <nav>
+        <strong>H4ck3r n3w5</strong>
+        <button class="menu_burger">
+            <div class="burger_top"></div>
+            <div class="burger_middle"></div>
+            <div class="burger_bottom"></div>
+        </button>
+
+        <nav class="desktop_menu">
             <li>
                 <a href="/index.php">Home</a>
             </li>
@@ -56,3 +63,35 @@ if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
 
         </nav>
     </section>
+    <nav class="burger_menu">
+        <li>
+            <a href="/index.php">Home</a>
+        </li>
+        <li>
+            <?php
+            if (!isset($_SESSION['user'])) : ?>
+                <a href="/app/users/login.php">Login</a>
+        </li>
+        <li><a href="/app/user/terms.php">Terms & Conditions</a></li>
+        <li><a href="/app/users/reg.php">Register</a></li>
+        </li>
+    <?php
+
+            else : ?>
+        <details>
+            <summary><a href="/app/posts/posts.php">Posts</a></summary>
+            <a href="/app/posts/new-post.php">+ Create New Post</a>
+        </details>
+        </li>
+        <li>
+            <details>
+                <summary><a href="/app/users/user.php"><?= $_SESSION['user'] ?></a></summary>
+                <a href="/app/users/user.php?action=settings">Edit User</a>
+                <a href="/app/users/terms.php">Terms & Conditions</a>
+                <a href="/app/users/log-out.php">Log out</a>
+            </details>
+        <?php
+            endif;
+        ?>
+
+    </nav>

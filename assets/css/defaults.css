@@ -4,6 +4,7 @@
   --red-text: rgb(255, 30, 0);
   --red-glass: rgba(255, 30, 0, 0.2);
   --black-glass: rgba(0, 0, 0, 0.8);
+  --black-glass-burger: rgba(0, 0, 0, 0.9);
   --lnk-color: rgb(0, 255, 136);
   --green-dark: rgb(15, 129, 0);
   color: var(--green-text);
@@ -138,21 +139,106 @@ ol {
 .navbar {
   display: flex;
   width: 100%;
-  height: 50px;
-  border-top: 2px solid var(--green-glass);
-  border-bottom: 2px solid var(--green-glass);
+  height: 80px;
+  box-sizing: content-box;
+  border-top: 5px solid var(--green-glass);
+  border-bottom: 5px solid var(--green-glass);
   align-items: center;
+  padding: 0px 30px;
   justify-content: center;
   box-shadow: 1px 1px 7px 7px black;
   position: fixed;
   background-color: var(--black-glass);
 }
+.navbar strong {
+  font-size: 2rem;
+  color: var(--green-text);
+}
+.menu_burger {
+  display: flex;
+  border: 2px solid;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 60px;
+  height: 50px;
+  width: 50px;
+  padding: 10px;
+}
+.menu_burger.open {
+  color: var(--red-text);
+  background-color: var(--red-glass);
+}
+.menu_burger.open div {
+  background-color: var(--red-text);
+}
+.menu_burger div {
+  display: block;
+  background-color: var(--green-text);
+  width: 32px;
+  height: 4px;
+  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+}
+.menu_burger.open > .burger_top {
+  transform: rotate(-45deg) translate(-9px, 5px);
+}
+.menu_burger.open > .burger_middle {
+  opacity: 0;
+}
+.menu_burger.open > .burger_bottom {
+  transform: rotate(45deg) translate(-8px, -9px);
+}
+
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 0%;
+  width: 0%;
+  transition: height 1s ease-in-out;
+  overflow: hidden;
+}
+nav.burger_menu {
+  margin-top: 90px;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: var(--black-glass-burger);
+  border-bottom: 5px solid var(--green-glass);
+  position: fixed;
+  font-size: 2rem;
+  z-index: 3;
+}
+nav.burger_menu li {
+  height: auto;
+  margin-top: 50px;
+}
+nav.burger_menu details {
+  text-align: center;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+nav.burger_menu details[open] {
+  background-color: var(--black-glass);
+  border-top: 2px solid var(--green-dark);
+  border-bottom: 2px solid var(--green-dark);
+}
+nav.burger_menu details[open] summary {
+  border-bottom: 2px solid var(--green-dark);
+}
+nav.burger_menu details > a {
+  font-size: 1.8rem;
+  display: block;
+  padding: 5px;
+}
+nav.show {
   height: 100%;
-  width: 80%;
+  width: 100%;
+}
+nav.burger_menu.show {
+  height: 87vh;
 }
 li {
   display: list-item;
@@ -215,7 +301,7 @@ span.quote {
   font-weight: bold;
 }
 main {
-  margin-top: 50px;
+  margin-top: 80px;
   padding: 30px;
 }
 main.post {

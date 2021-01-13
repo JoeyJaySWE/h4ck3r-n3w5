@@ -52,7 +52,7 @@ if (isset($_SESSION['user'])) {
         <input type="password" placeholder="Password" name="password" required>
         <button type="submit" name="submit">Login!</button>
     </form>
-    <a href="reg.php">Register for free!</a>
+    <a href="reg.php">Register for free!</a><br>
     <a href="https://1password.com/" target="_blank">Forgotten Password?</a>
     <p class="error">
         <?php if (isset($_SESSION['error_msg'])) {
@@ -70,7 +70,8 @@ if (isset($_SESSION['user'])) {
 // ----------------- [ Scripts ] ---------------------------------- 
 
 $scripts = [
-    '../../app/JS/navigator.js'
+    '../../app/JS/navigator.js',
+    '../../app/JS/functions.js'
 ];
 
 // ----------------------------------------------------------------

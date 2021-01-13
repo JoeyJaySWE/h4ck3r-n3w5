@@ -52,3 +52,14 @@ if (document.cookie.search("scroll") !== -1) {
   window.scrollTo(0, localStorage.getItem("scroll"));
   console.log("found scorll");
 }
+
+if (document.querySelector(".menu_burger")) {
+  console.log("found burger");
+  const burger = document.querySelector(".menu_burger");
+  const burger_menu = document.querySelector(".burger_menu");
+  burger.addEventListener("click", function () {
+    burger.classList.toggle("open");
+    burger_menu.classList.toggle("show");
+    console.log("burger clicked");
+  });
+}
