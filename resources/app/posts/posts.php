@@ -147,7 +147,7 @@ require "../../views/header.php";
                     <li>Score: <?php
                                 if ($post_data['Voters'] === "1") {
                                     echo "Unrated";
-                                } else echo $post_data['Scores'] . " (" . --$post_data['Voters'] . " votes)"; ?>,</li>
+                                } else echo $post_data['Scores'] . " (" . $post_data['Voters'] . " votes)"; ?>,</li>
                     <li><time>Published <?= $post_data['Published']; ?></time></li>
                 </ul> <?php
 
