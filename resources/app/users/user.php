@@ -54,22 +54,8 @@ require "../../views/header.php";
         <section class="quick_menue">
             <a class="quick_launch_card" href="../posts/new-post.php/">
                 <figure>
-                    <img src="https://via.placeholder.com/128?text=New+Post" alt="new post">
+                    <img src="../../assets/img/new_post.png" alt="new post">
                     <figcaption>Create new Post</figcaption>
-                </figure>
-            </a>
-            <a class="quick_launch_card" href="../posts/posts?action=edit.php/">
-                <figure>
-                    <img src="https://via.placeholder.com/128?text=Edit+Posts" alt="Edit Posts">
-                    <figcaption>Edit Posts</figcaption>
-                </figure>
-            </a>
-
-
-            <a class="quick_launch_card" href="../posts/posts?action=remove.php/">
-                <figure>
-                    <img src="https://via.placeholder.com/128?text=Remove+Post" alt="remove posts">
-                    <figcaption>Remove Posts</figcaption>
                 </figure>
             </a>
             <a class="quick_launch_card" href="../users/user.php?action=settings">
