@@ -119,7 +119,8 @@ function add_new_user($db, array $user_data): void
     if ($row) {
         $_SESSION['error_msg'] = "Email adress already in usedddd!";
         $_SESSION['success_msg'] = "";
-        header("Location: http://localhost:8000/app/users/reg.php");
+
+        header("Location: ../users/reg.php");
         die("error");
     } else {
 
@@ -135,10 +136,9 @@ function add_new_user($db, array $user_data): void
 
         // password match check
         if ($password !== $re_password) {
-
             $_SESSION['error_msg'] = "Passwords missmatch!";
             $_SESSION['success_msg'] = "";
-            header("Location: http://localhost:8000/app/users/reg.php");
+            header("Location: ../users/reg.php");
             die("password error");
         }
 
@@ -169,7 +169,7 @@ function add_new_user($db, array $user_data): void
                 $add_user->execute($data);
                 $_SESSION['error_msg'] = "";
                 $_SESSION['success_msg'] = "Successfully created user!";
-                header("Location: http://localhost:8000/app/users/reg.php");
+                header("Location: ../users/reg.php");
                 die("Success!");
             } catch (\PDOException $e) {
                 throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.

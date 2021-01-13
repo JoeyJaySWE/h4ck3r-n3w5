@@ -236,7 +236,6 @@ require "../../views/header.php";
                                     <section class="comment_tools">
                                         <button type="submit" name="submit" value="submit">Save!</button>
                                         <button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids'] ?>">Cancel</button>
-                                        <button class="delete" formnovalidate>DELETE</button>
                                     </section>
                                 </article>
                             </form>
