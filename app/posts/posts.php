@@ -52,7 +52,6 @@ if (
 ) {
     $comment_request = [];
     if ($_GET['action'] === "delete_comment" && (isset($_COOKIE['iBLyq7APeDV2'])) && $_COOKIE['iBLyq7APeDV2'] === "ht_4ev!7oEAhvq9U!c@UU9-u*m") {
-        // die(var_dump("Send to delete comment"));
         $comment_request['comment_id'] = $_COOKIE['comment_id'];
         $comment_request['post_id'] = $_COOKIE['post_id'];
         manage_comment(db(), $comment_request, "Delete");
