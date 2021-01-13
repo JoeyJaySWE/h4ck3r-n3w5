@@ -41,10 +41,7 @@ $title = "N3w5 Flow";
 if (isset($_GET)) {
     $_GET = form_sanitizer($_GET);
 }
-/*
-                                    <input type="hidden" name="post_id" value="<?= $post_data['Ids']; ?>">
-                                    <input type="hidden" name="comment_id" value="<?= $comment['Ids'] ?>">
-*/
+
 if (
     isset($_GET['comment'], $_GET['commentor'], $_GET['action'])
     && $_GET['post'] === $_COOKIE['post_id']
@@ -148,9 +145,9 @@ require "../../views/header.php";
                 <ul class="post_stats">
                     <li><?= $post_data['Links_visits']; ?> views,</li>
                     <li>Score: <?php
-                                if ($post_data['Scores'] === "1") {
+                                if ($post_data['Voters'] === "1") {
                                     echo "Unrated";
-                                } else echo $post_data['Scores'] ?>&nbsp;(<?= $post_data['Voters'] ?> votes),</li>
+                                } else echo $post_data['Scores'] . " (" . --$post_data['Voters'] . " votes)"; ?>,</li>
                     <li><time>Published <?= $post_data['Published']; ?></time></li>
                 </ul> <?php
 
@@ -215,7 +212,7 @@ require "../../views/header.php";
 
 
             <section class="comments_section">
-                <details open>
+                <details>
                     <summary>Leave a comment</summary>
                     <form class="comment_form" action="../databases/db.php" method="post">
                         <input type="hidden" name="task" value="add_comment">
@@ -243,7 +240,6 @@ require "../../views/header.php";
                                     <section class="comment_tools">
                                         <button type="submit" name="submit" value="submit">Save!</button>
                                         <button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids'] ?>">Cancel</button>
-                                        <button class="delete" name="delete" formnovalidate formaction="posts.php?post=<?= $post_data['Ids'] ?>&action=delete_comment">DELETE</button>
                                     </section>
                                 </article>
                             </form>
@@ -341,7 +337,7 @@ require "../../views/header.php";
                     <h2><a href="posts.php?post=<?= $post['Ids'] ?>"><?= $post['Titles'] ?></a></h2>
                     <ul class="post_stats">
                         <li><?= $post['Links_visits']; ?> views,</li>
-                        <li>Score: <?php if ($post['Scores'] === "1") {
+                        <li>Score: <?php if ($post['Voters'] === "1") {
                                         echo "Unrated";
                                     } else echo $post['Scores'] ?>,</li>
                         <li><time>Published <?= $post['Published']; ?></time></li>
