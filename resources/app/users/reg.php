@@ -96,7 +96,7 @@ $title = "Sign up";
 
 // ----------------------------------------------------------------
 
-session_start();
+
 // ----------------- [ Style sheets ] ----------------------------- 
 
 $styles = [
@@ -128,7 +128,7 @@ require  "../../views/header.php";
     </p>
     <br>
     <form action="../databases/db.php" method="post">
-        <input type="text" id="full_name" name="full_name" placeholder="Steven Stevenssen" required />
+        <input type="text" id="full_name" placeholder="Steven Stevenssen" required />
         <input type="email" name="email" placeholder="mail@mail.com" required />
         <input type="password" name="password" placeholder="password" required>
         <input type="hidden" name="task" value="add user" />
