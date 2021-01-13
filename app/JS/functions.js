@@ -7,6 +7,7 @@ cancel_btns.forEach((cancel_btn) => {
 });
 
 let url = window.location.href;
+document.cookie = "url=" + url;
 
 // cause we triggered the event as we were about to leave the field, we need to send it back to resume it.
 function new_post_safty(url) {

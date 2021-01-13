@@ -26,8 +26,12 @@ $styles = [
 // ----------------------------------------------------------------
 
 
+if (isset($_GET['action'])) {
+    $title = "User Settings";
+} else {
 
-$title = "User Page";
+    $title = "User Page";
+}
 
 require "../../views/header.php";
 // -----------------------------------------------------------------

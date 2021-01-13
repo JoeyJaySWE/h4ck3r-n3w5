@@ -63,7 +63,7 @@ if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
 
         </nav>
     </section>
-    <nav class="burger_menu show">
+    <nav class="burger_menu">
         <li>
             <a href="/index.php">Home</a>
         </li>

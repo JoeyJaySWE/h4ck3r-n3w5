@@ -36,23 +36,19 @@ if (!isset($_SESSION['posts'])) {
 unset($_SESSION['new-post']);
 
 require "../../views/functions.php";
-$title = "N3w5 Flow";
+// $title = get_title();
 
 if (isset($_GET)) {
     $_GET = form_sanitizer($_GET);
 }
-/*
-                                    <input type="hidden" name="post_id" value="<?= $post_data['Ids']; ?>">
-                                    <input type="hidden" name="comment_id" value="<?= $comment['Ids'] ?>">
-*/
+
 if (
     isset($_GET['comment'], $_GET['commentor'], $_GET['action'])
     && $_GET['post'] === $_COOKIE['post_id']
     && $_GET['comment'] === $_COOKIE['comment_id']
 ) {
     $comment_request = [];
-    if ($_GET['action'] === "delete_comment" && (isset($_COOKIE['iBLyq7APeDV2'])) && $_COOKIE['iBLyq7APeDV2'] === "ht_4ev!7oEAhvq9U!c@UU9-u*m") {
-        // die(var_dump("Send to delete comment"));
+    if ($_GET['action'] === "delete_comment") {
         $comment_request['comment_id'] = $_COOKIE['comment_id'];
         $comment_request['post_id'] = $_COOKIE['post_id'];
         manage_comment(db(), $comment_request, "Delete");
@@ -68,7 +64,8 @@ if (isset($_GET['post'])) {
 
     $post_id = (int)$_GET['post'];
     $post_data = get_post(db(), $post_id);
-    $title =  $post_data['Titles'];
+
+    $title = $post_data['Titles'];
 
 
 
@@ -103,39 +100,7 @@ require "../../views/header.php";
 
 
     if (isset($post_data)) :
-        if ($_SESSION['user'] === $post_data['Full_names'] && isset($_GET['action']) && $_GET['action'] === "edit_post") :
-            var_dump("User post edit");
-    ?>
-
-
-            <form class="post_card" action="../databases/db.php" method="post">
-                <input type="hidden" name="task" value="edit_post">
-                <input type="hidden" name="post_id" value="<?= $post_data['Ids'] ?>">
-                <section class="post_head">
-
-                    <figure>
-                        <img class="avatar" src="<?= $post_data['Avatars']; ?>" alt="<?= $post_data['Full_names']; ?>">
-                        <figcaption><?= $post_data['Full_names']; ?></figcaption>
-                    </figure>
-                    <input require type="text" name="title" value="<?= $post_data['Titles']; ?>" />
-                </section>
-                <textarea require name="description"><?= $post_data['Descriptions']; ?> </textarea>
-
-                <button type="submit" name="submit">Update!</button><button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids']; ?>">Cancel</button>
-
-                <p class="error">
-                    <?php if (isset($_SESSION['error_msgs'])) {
-                        echo $_SESSION['error_msgs'];
-                    } ?>
-                </p>
-            </form>
-            </article>
-        <?php
-
-        else :
-            unset($_GET['action']);
-        endif; //ends the "if user is authur and action = edit_post"
-        if (!isset($_GET['action']) /*|| $_GET['action'] !== "edit_comment" || $_GET['action'] !== "delete_comment"*/) : ?>
+        if (!isset($_GET['action']) || $_GET['action'] !== "edit_comment" || $_GET['action'] !== "delete_comment") : ?>
             <article class="post_card">
                 <section class="post_head">
 
@@ -179,14 +144,41 @@ require "../../views/header.php";
                         ?>
                     </form>
 
-            <?php endif; //ends the "if isset($not_authur)"
+                <?php endif; //ends the "if isset($not_authur)"
 
 
 
                     endif; //ends the "if !isset($_GET['action'])"
 
+                    if ($_SESSION['user'] === $post_data['Full_names'] && $_GET['action'] === "edit_post") :
+                        die(var_dump("User post edit"));
+                ?>
 
-            ?>
+
+                <form class="post_card" action="../databases/db.php" method="post">
+                    <input type="hidden" name="task" value="Add comment">
+                    <input type="hidden" name="post_id" value="<?= $post_data['Ids'] ?>">
+                    <section class="post_head">
+
+                        <figure>
+                            <img class="avatar" src="<?= $post_data['Avatars']; ?>" alt="<?= $post_data['Full_names']; ?>">
+                            <figcaption><?= $post_data['Full_names']; ?></figcaption>
+                        </figure>
+                        <input require type="text" name="title" value="<?= $post_data['Titles']; ?>" />
+                    </section>
+                    <textarea require name="description"><?= $post_data['Descriptions']; ?> </textarea>
+
+                    <button type="submit" name="submit">Update!</button><button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids']; ?>">Cancel</button>
+
+                    <p class="error">
+                        <?php if (isset($_SESSION['error_msgs'])) {
+                            echo $_SESSION['error_msgs'];
+                        } ?>
+                    </p>
+                    </from>
+
+                <?php endif; //ends the "if user is authur and action = edit_post"
+                ?>
             </article>
 
             <?php
@@ -244,7 +236,7 @@ require "../../views/header.php";
                                     <section class="comment_tools">
                                         <button type="submit" name="submit" value="submit">Save!</button>
                                         <button class="cancel" formnovalidate formaction="posts.php?post=<?= $post_data['Ids'] ?>">Cancel</button>
-                                        <button class="delete" name="delete" formnovalidate formaction="posts.php?post=<?= $post_data['Ids'] ?>&action=delete_comment">DELETE</button>
+                                        <button class="delete" formnovalidate>DELETE</button>
                                     </section>
                                 </article>
                             </form>
@@ -254,7 +246,7 @@ require "../../views/header.php";
                     endif; //edit
                     ?>
 
-                    <article class=" post_card">
+                    <article class="post_card">
                         <figure>
                             <img class="comment_avatar" src="<?= $comment['Avatars'] ?>" alt="<?= $comment['Full_names']; ?>">
                             <figcaption><?= $comment['Full_names']; ?></figcaption>

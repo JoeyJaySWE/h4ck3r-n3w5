@@ -1,7 +1,7 @@
 if (document.querySelector("button.edit_btn")) {
   const edit_btn = document.querySelector("button.edit_btn");
   edit_btn.addEventListener("click", function () {
-    window.location.href = url + "&action=edit";
+    window.location.href = url + "&action=edit_post";
   });
 
   //I never add edit without Delete

@@ -59,7 +59,7 @@ switch ($_POST['task']) {
         }
         break;
 
-    case "post_edit":
+    case "edit_post":
         echo "Edit post!";
         if ($_POST['title'] !== "" && $_POST['description'] !== "") {
             echo "Update Post!";
@@ -74,6 +74,7 @@ switch ($_POST['task']) {
         break;
 
     case "add_comment":
+        var_dump("Comment");
         echo "Add a comment!";
         manage_comment(db(), $_POST, "Add");
         break;

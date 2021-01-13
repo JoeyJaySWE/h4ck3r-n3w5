@@ -78,6 +78,29 @@ function form_sanitizer(array $post_data): array
 
 
 
+// ----------------- [ Get Title ] ------------------ 
+
+function get_title()
+{
+
+
+    if (isset($_GET['post'])) {
+        if (isset($_GET['action'])) {
+
+
+            $title = "Edit ";
+        }
+    } else {
+        $title = "N3ws Pots";
+    }
+
+
+    return $title;
+}
+
+// ----------------------------------------------------------------
+
+
 
 
 
@@ -413,7 +436,7 @@ function check_link($db, string $lnk): void
 
 
 
-// ----------------- [ Add new / Update Post ] ------------------ 
+// ----------------- [ Add new Post ] ------------------ 
 
 function add_post($db, array $post_data): void
 {
@@ -496,7 +519,6 @@ function add_post($db, array $post_data): void
 
 function update_post($db, array $post_data): void
 {
-
     $post_title = $post_data['title'];
     $descr = $post_data['description'];
     $post_id = $post_data['post_id'];
@@ -505,6 +527,7 @@ function update_post($db, array $post_data): void
     var_dump($post_title);
     var_dump($descr);
     var_dump($post_id);
+    var_dump(print_r($post_data));
     $update_post = $db->prepare("UPDATE posts 
                                 SET Titles = :post_title,
                                 Descriptions = :descr
@@ -513,7 +536,6 @@ function update_post($db, array $post_data): void
 
     try {
         $update_post->execute($query_data);
-
         header("Location: ../posts/posts.php?post=" . $post_id);
         die();
     } catch (\PDOException $e) {
@@ -601,7 +623,8 @@ function get_post($db, int $post_id, string $all = null, string $order = null, s
     INNER JOIN  users
     ON posts.Authurs_id = users.Ids
     INNER JOIN scores
-    ON posts.Ids = scores.Posts_id WHERE posts.Ids = :id");
+    ON posts.Ids = scores.Posts_id WHERE posts.Ids = :id
+    ORDER BY Published DESC");
     $query_data = ['id' => $post_id];
     $get_post->execute($query_data);
     $posts = $get_post->fetchALL(PDO::FETCH_ASSOC);
@@ -793,6 +816,7 @@ function manage_comment($db, array $comment_data, string $task)
 
             try {
                 $delete_comment->execute($comment_settings);
+                unset($_COOKIE['iBLyq7APeDV2']);
                 header("Location: ../posts/posts.php?post=" . $post);
             } catch (\PDOException $e) {
                 throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.

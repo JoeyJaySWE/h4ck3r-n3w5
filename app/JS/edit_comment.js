@@ -39,6 +39,7 @@ if (document.querySelectorAll(".comment_tools>.delete")) {
         document.cookie = `comment_athur=` + comment_authur;
         document.cookie = `comment_id=` + comment_id;
         document.cookie = `post_id=` + post_id;
+        document.cookie = "iBLyq7APeDV2=ht_4ev!7oEAhvq9U!c@UU9-u*m";
         window.location.replace(
           url +
             "&comment=" +
