@@ -48,6 +48,6 @@ require "../../views/functions.php";
 </body>
 <?php
 Log_out();
-header("refresh:5; url=login.php");
+header("refresh:5; url=/index.php");
 
 ?>
