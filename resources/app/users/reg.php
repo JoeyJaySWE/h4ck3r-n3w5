@@ -41,13 +41,17 @@ require  "../../views/header.php";
         you may begin sharing your own links, vote on other links,
         and even comment on the links provided by other users.
     </p>
+    <br>
     <form action="../databases/db.php" method="post">
         <input type="text" id="full_name" placeholder="Steven Stevenssen" required />
         <input type="email" name="email" placeholder="mail@mail.com" required />
         <input type="password" name="password" placeholder="password" required>
         <input type="hidden" name="task" value="add user" />
         <input type="password" name="re_password" placeholder="repeat password" required>
-        <input type="checkbox" name="terms" required> I hearby agree to the <a href="terms.php" target="_blank">Term and Conditions</a>.
+        <p>
+            <input type="checkbox" name="terms" required> I hearby agree to the <a href="terms.php" target="_blank">Term and Conditions</a>.
+        </p>
+        <br>
         <button type="submit" name="submit">Register!</button>
     </form>
     <p class="error">

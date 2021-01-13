@@ -76,13 +76,13 @@ require "../../views/header.php";
             <label for="description" disabled>Description:</label>
             <textarea id="lnk" name="lnk" disabled></textarea>
             <button type="submit" name="submit">Create!</button>
-            <button class="cancel" formnovalidate formaction="../users/user.php">Cancel</button>
+            <button class="cancel" formnovalidate formaction="../../users/user.php">Cancel</button>
         <?php
         else : ?>
             <label for="description">Description:</label>
             <textarea id="description" name="description" required></textarea>
             <button type="submit" name="submit">Create!</button>
-            <button class="cancel" formnovalidate formaction="/app/users/user.php">Cancel</button>
+            <button class="cancel" formnovalidate formaction="../../users/user.php">Cancel</button>
         <?php endif; ?>
     </form>
 </main>

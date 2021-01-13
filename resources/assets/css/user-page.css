@@ -45,3 +45,6 @@ h1 {
   display: block;
   text-align: center;
 }
+h2.subtitle{
+  justify-content: center;
+}

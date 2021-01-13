@@ -302,8 +302,10 @@ span.quote {
   font-weight: bold;
 }
 main {
-  margin-top: 80px;
   padding: 30px;
+  max-width:700px;
+  margin: auto;
+  margin-top: 80px;
 }
 main.post {
   padding: 0;
@@ -364,4 +366,13 @@ img.avatar_small {
 .bottom_anchor strong {
   text-align: center;
   margin-left: 20px;
+}
+@media screen and (min-width: 700px){
+  main{
+    max-width: 700px;
+    margin: atuo;
+  }
+  .menu_burger{
+    margin-left:380px;
+  }
 }

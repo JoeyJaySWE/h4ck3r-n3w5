@@ -100,10 +100,7 @@ form.vote_form {
   align-items: center;
   justify-content: space-around;
 }
-.users_form input,
-.user_form textarea {
-  max-width: 200px;
-}
+
 select:focus,
 select:active,
 select:-webkit-autofill,
