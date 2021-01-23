@@ -291,4 +291,9 @@ button {
 
 .upvote_comment_btn {
   margin-bottom: 1rem;
+  border: 1px solid;
+}
+
+.number-of-comment-upvotes {
+  font-size: 0.7rem;
 }
