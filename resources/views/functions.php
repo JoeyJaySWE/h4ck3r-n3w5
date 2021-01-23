@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// ----------------- [ Abbort Conenction ] ------------------ 
+// ----------------- [ Abbort Conenction ] ------------------
 
 function abort_conection(): void
 {
@@ -16,7 +16,7 @@ function abort_conection(): void
 
 
 
-// ----------------- [ DB connection ] ------------------ 
+// ----------------- [ DB connection ] ------------------
 
 function db()
 {
@@ -29,7 +29,7 @@ function db()
     ];
 
     try {
-        $db = new PDO($dir, "", "",  $options); //tries to connect to our databse using $path, $username, $passowrd, $options 
+        $db = new PDO($dir, "", "",  $options); //tries to connect to our databse using $path, $username, $passowrd, $options
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
     }
@@ -47,7 +47,7 @@ function db()
 
 
 
-// ----------------- [ Sanitize form inputs ] ------------------ 
+// ----------------- [ Sanitize form inputs ] ------------------
 
 function form_sanitizer(array $post_data): array
 {
@@ -78,7 +78,7 @@ function form_sanitizer(array $post_data): array
 
 
 
-// ----------------- [ Get Title ] ------------------ 
+// ----------------- [ Get Title ] ------------------
 
 function get_title()
 {
@@ -105,7 +105,7 @@ function get_title()
 
 
 
-// ----------------- [ Add New User ] ------------------------------ 
+// ----------------- [ Add New User ] ------------------------------
 
 function add_new_user($db, array $user_data): void
 {
@@ -188,7 +188,7 @@ function add_new_user($db, array $user_data): void
 
 
 
-// ----------------- [ Log In Function ] ------------------ 
+// ----------------- [ Log In Function ] ------------------
 
 function login($db, array $credentials): void
 {
@@ -257,7 +257,7 @@ function login($db, array $credentials): void
 
 
 
-// ----------------- [ Sign out ] ------------------ 
+// ----------------- [ Sign out ] ------------------
 
 function log_out(): void
 {
@@ -273,7 +273,7 @@ function log_out(): void
 
 
 
-// ----------------- [ Update user  ] ------------------ 
+// ----------------- [ Update user  ] ------------------
 
 function update_user($db, array $user): void
 {
@@ -404,7 +404,7 @@ function update_user($db, array $user): void
 
 
 
-// ----------------- [ Cehck link ] ------------------ 
+// ----------------- [ Cehck link ] ------------------
 
 function check_link($db, string $lnk): void
 {
@@ -436,7 +436,7 @@ function check_link($db, string $lnk): void
 
 
 
-// ----------------- [ Add new Post ] ------------------ 
+// ----------------- [ Add new Post ] ------------------
 
 function add_post($db, array $post_data): void
 {
@@ -528,7 +528,7 @@ function update_post($db, array $post_data): void
     var_dump($descr);
     var_dump($post_id);
     var_dump(print_r($post_data));
-    $update_post = $db->prepare("UPDATE posts 
+    $update_post = $db->prepare("UPDATE posts
                                 SET Titles = :post_title,
                                 Descriptions = :descr
                                 WHERE Ids = :Ids");
@@ -556,7 +556,7 @@ function update_post($db, array $post_data): void
 
 
 
-// ----------------- [ Get Post Data ] ------------------ 
+// ----------------- [ Get Post Data ] ------------------
 
 function get_post($db, int $post_id, string $all = null, string $order = null, string $direction = null): array
 {
@@ -578,7 +578,7 @@ function get_post($db, int $post_id, string $all = null, string $order = null, s
         } else {
             $sort = null;
         }
-        $get_posts = $db->query("SELECT 
+        $get_posts = $db->query("SELECT
                                     posts.*,
                                     users.Full_names,
                                     users.Avatars,
@@ -647,7 +647,7 @@ function get_post($db, int $post_id, string $all = null, string $order = null, s
 
 
 
-// ----------------- [ Add Visit ] ------------------ 
+// ----------------- [ Add Visit ] ------------------
 
 function add_visit($db, int $post_id): void
 {
@@ -675,7 +675,7 @@ function add_visit($db, int $post_id): void
 
 
 
-// ----------------- [ Voting ] ---------------------------------- 
+// ----------------- [ Voting ] ----------------------------------
 
 function vote($db, int $post_id, int $user, int $score, string $update)
 {
@@ -701,7 +701,7 @@ function vote($db, int $post_id, int $user, int $score, string $update)
 
 
 
-// ----------------- [ Check if voted ] ------------------ 
+// ----------------- [ Check if voted ] ------------------
 
 function check_voted($db, int $post_id, string $user): bool
 {
@@ -721,7 +721,7 @@ function check_voted($db, int $post_id, string $user): bool
 
 
 
-// ----------------- [ DELETE POST ] ------------------------------ 
+// ----------------- [ DELETE POST ] ------------------------------
 
 function delete_post($db, string $post_id, string $comments = null)
 {
@@ -757,12 +757,35 @@ function delete_post($db, string $post_id, string $comments = null)
     }
 }
 
-
+//MOAS ADDITION!!
 // --------------------------------------------------------------------
+function manage_reply($db, array $comment_data, string $task)
+{
+    $post = $comment_data['post_id'];
+
+    switch ($task) {
+
+        case "View":
+            $statement = $db->prepare("SELECT replies.*, users.Full_names, users.Avatars FROM replies INNER JOIN users ON replies.user_id = users.Ids WHERE replies.post_id = :post_id ORDER BY Published DESC");
+
+            $comment_settings = ['post_id' => $post];
+
+            try {
+
+                $statement->execute($comment_settings);
+                $replies = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $replies;
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode()); //sends out an error message if it fails to connect.
+            }
+            break;
+        default:
+            die("Unkown function");
+    }
+}
 
 
-
-// ----------------- [ Comment management] ---------------------------- 
+// ----------------- [ Comment management] ----------------------------
 
 function manage_comment($db, array $comment_data, string $task)
 {

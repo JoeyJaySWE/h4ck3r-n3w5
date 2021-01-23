@@ -185,3 +185,89 @@ button {
   width: 100%;
   max-width: 230px;
 }
+
+.hidden_reply_form {
+  display: none;
+}
+
+.reply_form {
+  display: block;
+}
+
+.hidden_reply_form button,
+.reply-container {
+  width: 100%;
+}
+
+.reply-container label {
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  list-style-image: none;
+  color: var(--lnk-color);
+  text-decoration: underline;
+}
+
+.reply-container section:first-child {
+  border-top: 3px solid var(--green-glass);
+  margin-top: 10px;
+}
+
+.single-reply {
+  display: flex;
+  margin-left: 2rem;
+  padding: 20px;
+  position: relative;
+
+  border-bottom: 3px solid var(--green-glass);
+}
+
+.single-reply p {
+  margin-left: 40px;
+}
+
+.single-reply .comment_avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: scale-down;
+  border-radius: 50%;
+  border: 3px solid var(--green-glass);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.reply-content .reply-published {
+  margin-top: 30px;
+  list-style-type: none;
+  flex-direction: column;
+  width: 100%;
+  line-height: 1.4rem;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--green-dark);
+  font-size: 0.8rem;
+}
+
+.reply_btn {
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  list-style-image: none;
+  color: var(--lnk-color);
+  text-decoration: underline;
+  border: none;
+}
+
+.delete-reply-btn {
+  position: absolute;
+  right: 0;
+  /* bottom: 0; */
+  font-size: 0.7rem;
+  border: 1px solid var(--red-text);
+}
