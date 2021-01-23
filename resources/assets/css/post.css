@@ -71,7 +71,7 @@ time.published {
   max-width: 250px;
   text-align: center;
 }
-.post_card > ul,
+.post_card > .post_stats,
 .post_card > ul time {
   margin-top: 30px;
   list-style-type: none;
@@ -188,6 +188,7 @@ button {
 
 .hidden_reply_form {
   display: none;
+  margin-bottom: 2rem;
 }
 
 .reply_form {
@@ -218,10 +219,9 @@ button {
 
 .single-reply {
   display: flex;
-  margin-left: 2rem;
+  margin-left: 1rem;
   padding: 20px;
   position: relative;
-
   border-bottom: 3px solid var(--green-glass);
 }
 
@@ -258,10 +258,8 @@ button {
   text-align: center;
   display: flex;
   justify-content: center;
-  list-style-image: none;
   color: var(--lnk-color);
   text-decoration: underline;
-  border: none;
 }
 
 .delete-reply-btn {
@@ -270,4 +268,27 @@ button {
   /* bottom: 0; */
   font-size: 0.7rem;
   border: 1px solid var(--red-text);
+}
+
+.comment_upvotes {
+  border-top: 2px solid var(--green-glass);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--green-dark);
+  width: 100%;
+  line-height: 1.4rem;
+  margin-top: 30px;
+  list-style-type: none;
+  padding-top: 20px;
+  flex-wrap: unset;
+}
+
+.comment_upvotes li:first-child {
+  margin-right: 1rem;
+}
+
+.upvote_comment_btn {
+  margin-bottom: 1rem;
 }

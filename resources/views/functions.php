@@ -784,6 +784,18 @@ function manage_reply($db, array $comment_data, string $task)
     }
 }
 
+function countCommentsUpvotes($db, int $commentId)
+{
+
+    $statement = $db->prepare('SELECT COUNT(*) FROM comments_upvotes WHERE comment_id = :commentId');
+    $statement->bindParam(':commentId', $commentId, PDO::PARAM_INT);
+    $statement->execute();
+
+    $commentUpvotes = $statement->fetch();
+
+    return $commentUpvotes['COUNT(*)'];
+}
+
 
 // ----------------- [ Comment management] ----------------------------
 

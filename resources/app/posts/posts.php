@@ -260,17 +260,33 @@ require "../../views/header.php";
                             if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
                                 <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="delete">DELETE</button>
                             <?php endif; ?>
+                            <!-- Moa tillägg  -->
                             <button data-commentid="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="reply_btn">Reply</button>
                             <?php if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
                                 <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="edit_btn">Edit</button>
                             <?php endif; ?>
                         </section>
-                        <ul class="comment_stats">
+                        <ul class="comment_upvotes">
                             <li><time>Published <?= $comment['Published']; ?></time></li>
+                            <!-- MOAS KOD  -->
+                            <?php $commentUpvotes = countCommentsUpvotes(db(), $comment['Ids']); ?>
+                            <li>
+                                <button data-commentid="<?= $comment['Ids']; ?>" data-userid="<?= $_SESSION['user_id']; ?>" class="upvote_comment_btn">
+                                    <?php if ($commentUpvotes == 1) : ?>
+                                        <span class="number-of-comment-upvotes" data-commentid="<?= $comment['Ids']; ?>">
+                                            <?= $commentUpvotes; ?> vote
+                                        </span>
+                                    <?php else : ?>
+                                        <span class="number-of-comment-upvotes" data-commentid="<?= $comment['Ids']; ?>">
+                                            <?= $commentUpvotes; ?> votes
+                                        </span>
+                                    <?php endif; ?>
+                                </button>
+                            </li>
                         </ul>
 
 
-                        <!-- MOA ADDITIONS !!!!!!!! -->
+                        <!-- MOA ADDITIONS -->
                         <section class="reply-container">
                             <form action="/app/posts/add-reply.php?id=<?= $post_data['Ids']; ?>&comment-id=<?= $comment['Ids']; ?>&user-id=<?= $_SESSION['user_id']; ?>" method="post" class="hidden_reply_form comment_form" data-commentid="<?= $comment['Ids']; ?>">
                                 <div>
@@ -296,9 +312,9 @@ require "../../views/header.php";
                                                 </p>
                                             </div>
                                             <?php if ($reply['user_id'] === $_SESSION['user_id']) : ?>
-                                                <form action="/app/posts/add-reply.php?id=<?= $post_data['Ids']; ?>&reply-id=<?= $reply['id']; ?>&user-id=<?= $_SESSION['user_id']; ?>" method="post" class="delete-reply-btn">
+                                                <form action="/app/posts/add-reply.php?id=<?= $post_data['Ids']; ?>&reply-id=<?= $reply['id']; ?>&user-id=<?= $_SESSION['user_id']; ?>" method="post">
                                                     <input type="hidden" name="delete-reply" id="delete-reply" />
-                                                    <button type="submit" class="delete delete-reply-btn">Delete</button>
+                                                    <button type="submit" class="delete delete-reply-btn">DELETE</button>
                                                 </form>
                                             <?php endif; ?>
                                         </section>
