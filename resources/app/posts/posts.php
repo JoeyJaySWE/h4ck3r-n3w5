@@ -18,7 +18,7 @@ $meta_card_alt = "A newspaper made up of code";
 // ----------------------------------------------------------------
 
 
-// ----------------- [ Style sheets ] ------------------ 
+// ----------------- [ Style sheets ] ------------------
 $styles = [
     '../../../assets/css/reset.css',
     '../../../assets/css/defaults.css',
@@ -79,7 +79,6 @@ if (isset($_GET['post'])) {
     } else if ($_SESSION['user'] !== $post_data['Full_names'] && isset($_GET['visited'])) {
         $not_authur = true;
     }
-    // die(var_dump($_SESSION));
 }
 
 
@@ -207,7 +206,7 @@ require "../../views/header.php";
 
 
 
-            // Comment section 
+            // Comment section
             ?>
 
 
@@ -226,7 +225,8 @@ require "../../views/header.php";
                 $comment_request = [];
                 $comment_request['post_id'] = $post_data['Ids'];
                 $comments = manage_comment(db(), $comment_request, "View");
-
+                $replies = manage_reply(db(), $comment_request, "View");
+                // die(var_dump($replies));
                 foreach ($comments as $comment) :
 
                     if (isset($edit)) :
@@ -255,16 +255,73 @@ require "../../views/header.php";
                             <figcaption><?= $comment['Full_names']; ?></figcaption>
                         </figure>
                         <p><?= $comment['Messages']; ?></p>
-                        <?php
-                        if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
-                            <section class="comment_tools">
-                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="edit_btn">Edit</button>
+                        <section class="comment_tools">
+                            <?php
+                            if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
                                 <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="delete">DELETE</button>
-                            </section>
-                        <?php endif; ?>
-                        <ul class="comment_stats">
+                            <?php endif; ?>
+                            <!-- Moa tillägg  -->
+                            <button data-commentid="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="reply_btn">Reply</button>
+                            <?php if ($comment['Users_id'] === $_SESSION['user_id']) : ?>
+                                <button data-comment-id="<?= $comment['Ids']; ?>" data-comment-writer="<?= $comment['Users_id'] ?>" data-post-id="<?= $post_data['Ids']; ?>" class="edit_btn">Edit</button>
+                            <?php endif; ?>
+                        </section>
+                        <ul class="comment_upvotes">
                             <li><time>Published <?= $comment['Published']; ?></time></li>
+                            <!-- MOAS KOD  -->
+                            <?php $commentUpvotes = countCommentsUpvotes(db(), $comment['Ids']); ?>
+                            <li>
+                                <button data-commentid="<?= $comment['Ids']; ?>" data-userid="<?= $_SESSION['user_id']; ?>" class="upvote_comment_btn">
+                                    <?php if ($commentUpvotes == 1) : ?>
+                                        <span class="number-of-comment-upvotes" data-commentid="<?= $comment['Ids']; ?>">
+                                            <?= $commentUpvotes; ?> vote
+                                        </span>
+                                    <?php else : ?>
+                                        <span class="number-of-comment-upvotes" data-commentid="<?= $comment['Ids']; ?>">
+                                            <?= $commentUpvotes; ?> votes
+                                        </span>
+                                    <?php endif; ?>
+                                </button>
+                            </li>
                         </ul>
+
+
+                        <!-- MOA ADDITIONS -->
+                        <section class="reply-container">
+                            <form action="/app/posts/add-reply.php?id=<?= $post_data['Ids']; ?>&comment-id=<?= $comment['Ids']; ?>&user-id=<?= $_SESSION['user_id']; ?>" method="post" class="hidden_reply_form comment_form" data-commentid="<?= $comment['Ids']; ?>">
+                                <div>
+                                    <label for="reply">Reply to comment</label>
+                                    <textarea requireed maxlength="5000" type="text" name="reply" id="reply"></textarea>
+                                </div>
+                                <button type="submit">Reply</button>
+                            </form>
+                            <section class="replies">
+                                <?php foreach ($replies as $reply) : ?>
+                                    <?php if ($reply['comment_id'] === $comment['Ids']) : ?>
+                                        <section class="single-reply">
+                                            <figure>
+                                                <img class="comment_avatar" src="<?= $reply['Avatars']; ?>" alt="<?= $reply['Full_names']; ?>" />
+                                                <figcaption><?= $reply['Full_names']; ?></figcaption>
+                                            </figure>
+                                            <div class="reply-content">
+                                                <p>
+                                                    <?= $reply['messages']; ?>
+                                                </p>
+                                                <p class="reply-published">
+                                                    <?= $reply['published']; ?>
+                                                </p>
+                                            </div>
+                                            <?php if ($reply['user_id'] === $_SESSION['user_id']) : ?>
+                                                <form action="/app/posts/add-reply.php?id=<?= $post_data['Ids']; ?>&reply-id=<?= $reply['id']; ?>&user-id=<?= $_SESSION['user_id']; ?>" method="post">
+                                                    <input type="hidden" name="delete-reply" id="delete-reply" />
+                                                    <button type="submit" class="delete delete-reply-btn">DELETE</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </section>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </section>
+                        </section>
                     </article>
 
                 <?php endforeach; ?>
@@ -356,7 +413,7 @@ require "../../views/header.php";
 
 <?php
 
-// ----------------- [ Scripts ] ---------------------------------- 
+// ----------------- [ Scripts ] ----------------------------------
 
 if (!isset($_GET['post'])) {
 
@@ -373,13 +430,15 @@ if (!isset($_GET['post'])) {
             '/app/JS/edit_comment.js',
             '/app/JS/edit_post.js',
             '/app/JS/navigator.js',
+            '/app/JS/reply_comment.js'
         ];
     } else {
 
         $scripts = [
             '/app/JS/navigator.js',
             '/app/JS/functions.js',
-            '/app/JS/edit_comment.js'
+            '/app/JS/edit_comment.js',
+            '/app/JS/reply_comment.js'
         ];
     }
 }

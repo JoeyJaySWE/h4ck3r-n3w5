@@ -45,3 +45,29 @@ h1 {
   display: block;
   text-align: center;
 }
+
+.delete-account-container h2 {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.delete-account-container form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+}
+.delete-account-container label {
+  margin-top: 1rem;
+}
+.delete-account-container button {
+  width: 50%;
+  margin-top: 1rem;
+}
+
+.delete-account-container h4 {
+  color: var(--red-text);
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}

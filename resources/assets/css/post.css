@@ -71,7 +71,7 @@ time.published {
   max-width: 250px;
   text-align: center;
 }
-.post_card > ul,
+.post_card > .post_stats,
 .post_card > ul time {
   margin-top: 30px;
   list-style-type: none;
@@ -184,4 +184,116 @@ button {
 .comments_section > article.post_card > p {
   width: 100%;
   max-width: 230px;
+}
+
+.hidden_reply_form {
+  display: none;
+  margin-bottom: 2rem;
+}
+
+.reply_form {
+  display: block;
+}
+
+.hidden_reply_form button,
+.reply-container {
+  width: 100%;
+}
+
+.reply-container label {
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  list-style-image: none;
+  color: var(--lnk-color);
+  text-decoration: underline;
+}
+
+.reply-container section:first-child {
+  border-top: 3px solid var(--green-glass);
+  margin-top: 10px;
+}
+
+.single-reply {
+  display: flex;
+  margin-left: 1rem;
+  padding: 20px;
+  position: relative;
+  border-bottom: 3px solid var(--green-glass);
+}
+
+.single-reply p {
+  margin-left: 40px;
+}
+
+.single-reply .comment_avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: scale-down;
+  border-radius: 50%;
+  border: 3px solid var(--green-glass);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.reply-content .reply-published {
+  margin-top: 30px;
+  list-style-type: none;
+  flex-direction: column;
+  width: 100%;
+  line-height: 1.4rem;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--green-dark);
+  font-size: 0.8rem;
+}
+
+.reply_btn {
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  color: var(--lnk-color);
+  text-decoration: underline;
+}
+
+.delete-reply-btn {
+  position: absolute;
+  right: 0;
+  /* bottom: 0; */
+  font-size: 0.7rem;
+  border: 1px solid var(--red-text);
+}
+
+.comment_upvotes {
+  border-top: 2px solid var(--green-glass);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--green-dark);
+  width: 100%;
+  line-height: 1.4rem;
+  margin-top: 30px;
+  list-style-type: none;
+  padding-top: 20px;
+  flex-wrap: unset;
+}
+
+.comment_upvotes li:first-child {
+  margin-right: 1rem;
+}
+
+.upvote_comment_btn {
+  margin-bottom: 1rem;
+  border: 1px solid;
+}
+
+.number-of-comment-upvotes {
+  font-size: 0.7rem;
 }

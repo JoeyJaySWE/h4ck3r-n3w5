@@ -1,4 +1,5 @@
 # h4ck3r.n3w5
+
 <p>
 Christmas handin from YRGO Webdev 2020. Release date: 14th of January 2021
 </p>
@@ -23,6 +24,16 @@ Christmas handin from YRGO Webdev 2020. Release date: 14th of January 2021
 - I liked that you added Terms & Conditions to your website, it seems as a real website.
 - In reset.css : It's good that you have written the code briefly, I'll work on that in my coming projects.
 - Generally, you did a great job.
+
+## Extra features
+
+**by [Moa Berg](https://github.com/moasannacatharina)**
+
+- Upvote comments
+- Reply to comments
+- Delete account along with posts, user information, upvotes, scores and comments.
+
+Link to pull request [here](https://github.com/JoeyJaySWE/h4ck3r-n3w5/pull/2).
 
 <!--
 Add your text here then send a pull-request when done. Sorry for the amount of code, and it's sadly a total mess too T.T

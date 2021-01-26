@@ -78,4 +78,8 @@ switch ($_POST['task']) {
     default:
         die(var_dump($_POST['task']));
         break;
+
+    case "delete_account":
+        delete_account();
+        break;
 }
