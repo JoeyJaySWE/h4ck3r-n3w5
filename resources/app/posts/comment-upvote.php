@@ -28,7 +28,6 @@ if (isset($_POST)) {
         $statement->execute();
     }
 
-    // omvandlar mängden upvotes till json-data som fångas upp i JS.
     $commentUpvotes = countCommentsUpvotes(db(), $commentId);
     echo json_encode($commentUpvotes);
 }

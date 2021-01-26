@@ -23,8 +23,6 @@ const numberOfUpvotesSpan = document.querySelectorAll(
   ".number-of-comment-upvotes"
 );
 
-console.log(upvoteCommentBtns);
-
 upvoteCommentBtns.forEach((upvoteBtn) => {
   upvoteBtn.addEventListener("click", (e) => {
     const commentId = e.currentTarget.dataset.commentid;

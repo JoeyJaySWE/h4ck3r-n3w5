@@ -89,6 +89,7 @@ if (!strpos($_SERVER['REQUEST_URI'], "posts.php")) {
                 <a href="/app/users/user.php?action=settings">Edit User</a>
                 <a href="/app/users/terms.php">Terms & Conditions</a>
                 <a href="/app/users/log-out.php">Log out</a>
+                <a href="/app/users/delete.php">Delete account</a>
             </details>
         <?php
             endif;

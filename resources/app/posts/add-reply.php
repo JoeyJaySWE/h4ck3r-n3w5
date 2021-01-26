@@ -21,7 +21,6 @@ if (isset($_POST['reply'])) {
     $statement->execute();
 
     header("Location: /app/posts/posts.php?post=" . $post_id);
-    // die(var_dump($statement));
 }
 
 if (isset($_POST['delete-reply'])) {

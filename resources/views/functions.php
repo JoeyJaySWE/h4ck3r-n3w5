@@ -271,6 +271,73 @@ function log_out(): void
 
 
 
+// Moas addition
+// ----------------- [ DELETE ACCOUNT ] ------------------
+function delete_account(): void
+{
+    if (isset($_POST['password'], $_POST['confirm-password'])) {
+        $_SESSION['success_msgs'] = [];
+        $_SESSION['error_msgs'] = [];
+
+        $password = $_POST['password'];
+        $password_confirm = $_POST['confirm-password'];
+        $id = $_POST['user_id'];
+
+        $statement = db()->prepare('SELECT * FROM users WHERE Ids = :user_id');
+        $statement->bindParam('user_id', $id);
+        $statement->execute();
+        $user = $statement->fetch();
+
+
+
+        if ($password === $password_confirm) {
+            if (isset($user) && password_verify($password, $user['Passwords'])) {
+                $statement = db()->prepare('DELETE FROM users WHERE Ids = :id');
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+
+                $statement = db()->prepare('DELETE FROM posts WHERE Authurs_id = :id');
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+
+                $statement = db()->prepare('DELETE FROM scores WHERE Users_id = :id');
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+
+                $statement = db()->prepare('DELETE FROM comments WHERE Users_id = :id');
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+
+                $statement = db()->prepare('DELETE FROM comments_upvotes WHERE user_id = :id');
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+
+                $statement = db()->prepare('DELETE FROM replies WHERE user_id = :id');
+                $statement->bindParam(':id', $id, PDO::PARAM_INT);
+                $statement->execute();
+
+                session_start();
+                $_SESSION['success_msgs'] = "Your account has been deleted.";
+                session_destroy();
+                header('Location: /app/users/log-out.php');
+            } else {
+                session_start();
+                $_SESSION['error_msgs'] = "Wrong password, try again.";
+                header('Location: /app/users/delete.php');
+            }
+        } else {
+            session_start();
+            $_SESSION['error_msgs'] = "Your passwords did not match, try again.";
+            header('Location: /app/users/delete.php');
+        }
+    }
+}
+
+
+
+// ------------------------------------------------------
+
+
 
 
 // ----------------- [ Update user  ] ------------------
@@ -757,8 +824,12 @@ function delete_post($db, string $post_id, string $comments = null)
     }
 }
 
-//MOAS ADDITION!!
+
 // --------------------------------------------------------------------
+
+
+//MOAS ADDITION!!
+// ------------------------[ VIEW REPLIES ]----------------------------------
 function manage_reply($db, array $comment_data, string $task)
 {
     $post = $comment_data['post_id'];
@@ -783,6 +854,13 @@ function manage_reply($db, array $comment_data, string $task)
             die("Unkown function");
     }
 }
+
+// ----------------------------------------------------------------
+
+
+
+
+// ---------------------[ COUNT UPVOTES ON COMMENTS ]--------------
 
 function countCommentsUpvotes($db, int $commentId)
 {
