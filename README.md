@@ -5,8 +5,6 @@ Christmas handin from YRGO Webdev 2020. Release date: 14th of January 2021
 </p>
 <a href="https://trello.com/b/mv9MlHde" target="_blank">Site Road-map (Trello)</a>
 
-<a href="https://projects.joeyjaydigital.com/h4ck3r.n3w5/" target="_blank">Live version</a>
-
 <h2>Install isntructions<h2>
 
 <ol>
