@@ -1,7 +1,9 @@
 # h4ck3r.n3w5
 
 <p>
-Christmas handin from YRGO Webdev 2020. Release date: 14th of January 2021
+Christmas handin from YRGO Webdev 2020. Release date: 14th of January 2021.<br><br>
+<em>Make a comunity web page called "hacker news" where people can sign in,<br>
+  upload, manage, comment and vote on their favourite links</em>
 </p>
 <a href="https://trello.com/b/mv9MlHde" target="_blank">Site Road-map (Trello)</a>
 
